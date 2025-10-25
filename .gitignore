@@ -1,0 +1,47 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Virtual environment
+venv/
+ENV/
+env/
+.venv/
+
+# Django stuff
+*.log
+*.pot
+*.pyc
+*.mo
+db.sqlite3
+media/
+staticfiles/
+
+# If you use Django migrations but want to exclude compiled pyc
+*/migrations/__pycache__/
+
+# VS Code
+.vscode/
+
+# PyCharm / JetBrains
+.idea/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Environments
+.env
+*.env
+
+# Coverage / testing
+.coverage
+htmlcov/
+.tox/
+.pytest_cache/

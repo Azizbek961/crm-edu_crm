@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Students - Samo Learning Center</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        :root {
+            --primary: #2563EB;
+            --primary-dark: #1D4ED8;
+            --secondary: #FF6B35;
+            --light: #F3F4F6;
+            --dark: #1F2937;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --border-radius: 12px;
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            background-color: #F5F7FB;
+            color: var(--dark);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 8px;
+            background: rgba(37, 99, 235, 0.1);
+            transition: var(--transition);
+        }
+
+        .back-btn:hover {
+            background: rgba(37, 99, 235, 0.2);
+        }
+
+        .card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 25px;
+        }
+
+        .group-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #E5E7EB;
+        }
+
+        .group-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            background: rgba(37, 99, 235, 0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--primary);
+            font-size: 20px;
+        }
+
+        .group-details h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .group-details p {
+            color: #6B7280;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .search-box {
+            margin-bottom: 20px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #E5E7EB;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: var(--transition);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .students-list {
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid #E5E7EB;
+            border-radius: 8px;
+        }
+
+        .student-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #F3F4F6;
+            transition: var(--transition);
+        }
+
+        .student-item:last-child {
+            border-bottom: none;
+        }
+
+        .student-item:hover {
+            background: #F9FAFB;
+        }
+
+        .student-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #E5E7EB;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 600;
+            margin-right: 15px;
+        }
+
+        .student-info {
+            flex: 1;
+        }
+
+        .student-name {
+            font-weight: 500;
+            margin-bottom: 2px;
+        }
+
+        .student-details {
+            font-size: 12px;
+            color: #6B7280;
+        }
+
+        .student-checkbox {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            border: 2px solid #D1D5DB;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: var(--transition);
+        }
+
+        .student-checkbox.checked {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        .no-students {
+            text-align: center;
+            padding: 40px;
+            color: #6B7280;
+        }
+
+        .no-students i {
+            font-size: 48px;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 25px;
+        }
+
+        .btn {
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--dark);
+            border: 1px solid #E5E7EB;
+        }
+
+        .btn-secondary:hover {
+            background: #F9FAFB;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 15px;
+            }
+
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="page-header">
+            <h1 class="page-title">Add Students to Group</h1>
+            <a href="{% url 'group_detail' group.id %}" class="back-btn">
+                <i class="fas fa-arrow-left"></i> Back to Group
+            </a>
+        </div>
+
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}" style="padding: 10px; margin-bottom: 15px; border-radius: 5px;
+                {% if message.tags == 'success' %}background: #D1FAE5; color: #065F46; border: 1px solid #A7F3D0;{% endif %}
+                {% if message.tags == 'error' %}background: #FEE2E2; color: #991B1B; border: 1px solid #FCA5A5;{% endif %}
+                {% if message.tags == 'warning' %}background: #FEF3C7; color: #92400E; border: 1px solid #FCD34D;{% endif %}">
+                <i class="fas {% if message.tags == 'success' %}fa-check-circle{% elif message.tags == 'error' %}fa-exclamation-circle{% else %}fa-exclamation-triangle{% endif %}"></i>
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <div class="card">
+            <div class="group-info">
+                <div class="group-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="group-details">
+                    <h3>{{ group.name }}</h3>
+                    <p>{{ group.subject.name }} •
+                        {% if group.teacher.user %}
+                            {{ group.teacher.user.first_name }} {{ group.teacher.user.last_name }}
+                        {% else %}
+                            {{ group.teacher.first_name }} {{ group.teacher.last_name }}
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+
+            <h3 class="section-title">Select Students to Add</h3>
+
+            <form method="POST" action="{% url 'add_students_to_group' group.id %}">
+                {% csrf_token %}
+
+                <div class="search-box">
+                    <input type="text" class="search-input" placeholder="Search students..." id="searchInput">
+                </div>
+
+                <div class="students-list">
+                    {% if available_students %}
+                        {% for student in available_students %}
+                        <div class="student-item" data-name="{% if student.user %}{{ student.user.first_name }} {{ student.user.last_name }}{% else %}{{ student.first_name }} {{ student.last_name }}{% endif %}">
+                            <div class="student-avatar">
+                                {% if student.user %}
+                                    {{ student.user.first_name|first }}{{ student.user.last_name|first }}
+                                {% else %}
+                                    {{ student.first_name|first }}{{ student.last_name|first }}
+                                {% endif %}
+                            </div>
+                            <div class="student-info">
+                                <div class="student-name">
+                                    {% if student.user %}
+                                        {{ student.user.first_name }} {{ student.user.last_name }}
+                                    {% else %}
+                                        {{ student.first_name }} {{ student.last_name }}
+                                    {% endif %}
+                                </div>
+                                <div class="student-details">
+                                    {% if student.user %}
+                                        {{ student.user.email }}
+                                    {% else %}
+                                        {{ student.email|default:"N/A" }}
+                                    {% endif %}
+                                    • {{ student.phone|default:"N/A" }}
+                                </div>
+                            </div>
+                            <div class="student-checkbox" onclick="toggleStudent(this, {{ student.id }})">
+                                <i class="fas fa-check" style="font-size: 12px; display: none;"></i>
+                            </div>
+                            <input type="checkbox" name="students" value="{{ student.id }}" style="display: none;">
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="no-students">
+                            <i class="fas fa-user-graduate"></i>
+                            <h3>No Available Students</h3>
+                            <p>All students are already in this group or no students exist in the system.</p>
+                        </div>
+                    {% endif %}
+                </div>
+
+                {% if available_students %}
+                <div class="action-buttons">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-user-plus"></i> Add Selected Students
+                    </button>
+                    <a href="{% url 'group_detail' group.id %}" class="btn btn-secondary">
+                        <i class="fas fa-times"></i> Cancel
+                    </a>
+                </div>
+                {% endif %}
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function toggleStudent(checkboxElement, studentId) {
+            const checkbox = checkboxElement;
+            const hiddenInput = checkboxElement.nextElementSibling;
+
+            if (checkbox.classList.contains('checked')) {
+                checkbox.classList.remove('checked');
+                checkbox.querySelector('i').style.display = 'none';
+                hiddenInput.checked = false;
+            } else {
+                checkbox.classList.add('checked');
+                checkbox.querySelector('i').style.display = 'block';
+                hiddenInput.checked = true;
+            }
+        }
+
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const studentItems = document.querySelectorAll('.student-item');
+
+            studentItems.forEach(item => {
+                const studentName = item.getAttribute('data-name').toLowerCase();
+                if (studentName.includes(searchTerm)) {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+
+        // Select all functionality (agar kerak bo'lsa)
+        function selectAllStudents() {
+            const checkboxes = document.querySelectorAll('.student-checkbox');
+            const hiddenInputs = document.querySelectorAll('input[name="students"]');
+
+            checkboxes.forEach(checkbox => {
+                checkbox.classList.add('checked');
+                checkbox.querySelector('i').style.display = 'block';
+            });
+
+            hiddenInputs.forEach(input => {
+                input.checked = true;
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Samo Learning Center - Attendance Management</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        :root {
+            --primary: #2563EB;
+            --primary-dark: #1D4ED8;
+            --secondary: #FF6B35;
+            --light: #F3F4F6;
+            --dark: #1F2937;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --sidebar-width: 260px;
+            --header-height: 70px;
+            --border-radius: 12px;
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            background-color: #F5F7FB;
+            color: var(--dark);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--dark);
+            color: white;
+            height: 100vh;
+            position: fixed;
+            transition: var(--transition);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-logo {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 10px;
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        .sidebar-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .sidebar-menu {
+            padding: 20px 0;
+        }
+
+        .menu-label {
+            padding: 10px 20px;
+            font-size: 12px;
+            text-transform: uppercase;
+            color: #9CA3AF;
+            letter-spacing: 1px;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 14px 20px;
+            color: #E5E7EB;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .menu-item:hover, .menu-item.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-left: 4px solid var(--primary);
+        }
+
+        .menu-item i {
+            margin-right: 12px;
+            font-size: 18px;
+            width: 24px;
+            text-align: center;
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            transition: var(--transition);
+        }
+
+        /* Header/Navbar Styles */
+        .header {
+            height: var(--header-height);
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 25px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .header-action {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--light);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-left: 15px;
+            cursor: pointer;
+            position: relative;
+            color: var(--dark);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--danger);
+            color: white;
+            font-size: 10px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            margin-left: 20px;
+            cursor: pointer;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: 600;
+            margin-right: 10px;
+        }
+
+        /* Attendance Content Styles */
+        .attendance {
+            padding: 25px;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .page-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: var(--border-radius);
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .card {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+
+        .card-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .filter-controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #D1D5DB;
+            border-radius: var(--border-radius);
+            background: white;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .attendance-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .attendance-table th,
+        .attendance-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--light);
+        }
+
+        .attendance-table th {
+            background: #F9FAFB;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .attendance-table tr:hover {
+            background: #F9FAFB;
+        }
+
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .status-present {
+            background: #ECFDF5;
+            color: var(--success);
+        }
+
+        .status-absent {
+            background: #FEF2F2;
+            color: var(--danger);
+        }
+
+        .status-late {
+            background: #FFFBEB;
+            color: var(--warning);
+        }
+
+        .status-excused {
+            background: #EFF6FF;
+            color: var(--primary);
+        }
+
+        .attendance-actions {
+            display: flex;
+            gap: 5px;
+        }
+
+        .action-btn {
+            padding: 5px 10px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .edit-btn {
+            background: #EFF6FF;
+            color: var(--primary);
+        }
+
+        .edit-btn:hover {
+            background: #DBEAFE;
+        }
+
+        .delete-btn {
+            background: #FEF2F2;
+            color: var(--danger);
+        }
+
+        .delete-btn:hover {
+            background: #FEE2E2;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            gap: 5px;
+        }
+
+        .page-link {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            border: 1px solid #D1D5DB;
+            background: white;
+            color: var(--dark);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .page-link:hover, .page-link.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: var(--border-radius);
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #6B7280;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .modal-footer {
+            padding: 20px;
+            border-top: 1px solid var(--light);
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 70px;
+                overflow: hidden;
+            }
+
+            .sidebar-header, .menu-label, .menu-item span {
+                display: none;
+            }
+
+            .menu-item {
+                justify-content: center;
+                padding: 18px;
+            }
+
+            .menu-item i {
+                margin-right: 0;
+                font-size: 20px;
+            }
+
+            .main-content {
+                margin-left: 70px;
+            }
+
+            .sidebar:hover {
+                width: var(--sidebar-width);
+                z-index: 1001;
+            }
+
+            .sidebar:hover .sidebar-header,
+            .sidebar:hover .menu-label,
+            .sidebar:hover .menu-item span {
+                display: flex;
+            }
+
+            .sidebar:hover .menu-item {
+                justify-content: flex-start;
+                padding: 14px 20px;
+            }
+
+            .sidebar:hover .menu-item i {
+                margin-right: 12px;
+                font-size: 18px;
+            }
+
+            .filter-controls {
+                grid-template-columns: 1fr;
+            }
+
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .page-actions {
+                width: 100%;
+                justify-content: space-between;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .header {
+                padding: 0 15px;
+            }
+
+            .user-profile .user-name {
+                display: none;
+            }
+
+            .attendance {
+                padding: 15px;
+            }
+
+            .attendance-table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">S</div>
+            <div class="sidebar-title">Samo CRM</div>
+        </div>
+
+        <div class="sidebar-menu">
+            <div class="menu-label">Main</div>
+            <a href="{% url 'admin_dashboard' %}" class="menu-item">
+                <i class="fas fa-home"></i>
+                <span>Dashboard</span>
+            </a>
+            <div class="menu-label">User</div>
+            <a href="{% url 'admin_users_management' %}" class="menu-item">
+                <i class="fas fa-user-friends"></i>
+                <span>Users</span>
+            </a>
+            <a href="{% url 'teachers_list' %}" class="menu-item ">
+                <i class="fas fa-chalkboard-teacher"></i>
+                <span>Teachers</span>
+            </a>
+            <a href="{% url 'student_list' %}" class="menu-item">
+                <i class="fas fa-users"></i>
+                <span>Students</span>
+            </a>
+            <div class="menu-label">Group</div>
+            <a href="{% url 'groups_list' %}" class="menu-item">
+                <i class="fas fa-layer-group"></i>
+                <span>Groups</span>
+            </a>
+            <a href="{% url 'attendance_list' %}" class="menu-item active">
+                <i class="fas fa-clipboard-check"></i>
+                <span>Attendance</span>
+            </a>
+            <div class="menu-label">Exam</div>
+            <a href="{% url 'exams:admin_exam_management' %}" class="menu-item">
+                <i class="fas fa-file-alt"></i>
+                <span>Exams</span>
+            </a>
+            <a href="{% url 'exams:admin_exam_results' %}" class="menu-item">
+                <i class="fas fa-chart-line"></i>
+                <span>Performance</span>
+            </a>
+            <div class="menu-label">Payment</div>
+            <a href="{% url 'payments:admin_payments_dashboard' %}" class="menu-item">
+                <i class="fas fa-money-check"></i>
+                <span>Payments</span>
+            </a>
+            <div class="menu-label">Education</div>
+            <a href="{% url 'education:courses_dashboard' %}" class="menu-item">
+                <i class="fas fa-graduation-cap"></i>
+                <span>Courses</span>
+            </a>
+            <a href="{% url 'education:admin_homework' %}" class="menu-item">
+                <i class="fas fa-tasks"></i>
+                <span>Assignments</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header/Navbar -->
+        <header class="header">
+            <div class="header-left">
+                <!-- No burger icon as requested -->
+            </div>
+
+            <div class="header-right">
+                <div class="header-action">
+                    <i class="far fa-bell"></i>
+                    <span class="notification-badge">3</span>
+                </div>
+
+                <div class="user-profile">
+                    <div class="user-avatar">AJ</div>
+                    <div class="user-name">{{ request.user.get_full_name|default:request.user.username }}</div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Attendance Content -->
+        <div class="attendance">
+            <div class="page-header">
+                <h1 class="page-title">Attendance Management</h1>
+                <div class="page-actions">
+                    <button class="btn btn-outline" id="exportBtn">
+                        <i class="fas fa-download"></i> Export
+                    </button>
+                    <button class="btn btn-primary" id="addAttendanceBtn">
+                        <i class="fas fa-plus"></i> Add Record
+                    </button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Attendance Records</h2>
+                </div>
+                <div class="card-body">
+                    <form method="GET" id="filterForm">
+                        <div class="filter-controls">
+                            <div class="form-group">
+                                <label class="form-label">Group</label>
+                                <select class="form-control" name="group" id="groupFilter">
+                                    <option value="">All Groups</option>
+                                    {% for group in groups %}
+                                        <option value="{{ group.id }}" {% if group_filter == group.id|stringformat:"s" %}selected{% endif %}>{{ group.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Date</label>
+                                <input type="date" class="form-control" name="date" id="dateFilter" value="{{ date_filter }}">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Status</label>
+                                <select class="form-control" name="status" id="statusFilter">
+                                    <option value="">All Statuses</option>
+                                    <option value="present" {% if status_filter == "present" %}selected{% endif %}>Present</option>
+                                    <option value="absent" {% if status_filter == "absent" %}selected{% endif %}>Absent</option>
+                                    <option value="late" {% if status_filter == "late" %}selected{% endif %}>Late</option>
+                                    <option value="excused" {% if status_filter == "excused" %}selected{% endif %}>Excused</option>
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+
+                    <table class="attendance-table">
+                        <thead>
+                            <tr>
+                                <th>Student</th>
+                                <th>Group</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Recorded By</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                          {% for attendance in attendances %}
+<tr>
+    <td>{{ attendance.student.user.get_full_name|default:attendance.student.user.username }}</td>
+    <td>{{ attendance.group.name }}</td>
+    <td>{{ attendance.date }}</td>
+    <td>
+        <span class="status-badge status-{{ attendance.status }}">
+            {{ attendance.get_status_display }}
+        </span>
+    </td>
+    <td>{{ attendance.recorded_by.get_full_name|default:attendance.recorded_by.username }}</td>
+
+    <td class="attendance-actions">
+        <button class="action-btn edit-btn" data-id="{{ attendance.id }}">
+            <i class="fas fa-edit"></i>
+        </button>
+        <button class="action-btn delete-btn" data-id="{{ attendance.id }}">
+            <i class="fas fa-trash"></i>
+        </button>
+    </td>
+</tr>
+{% empty %}
+<tr>
+    <td colspan="6" style="text-align: center;">No attendance records found.</td>
+</tr>
+{% endfor %}
+
+                        </tbody>
+                    </table>
+
+                    <!-- Pagination -->
+                    <div class="pagination">
+                        <!-- Kelajakda pagination qo'shish mumkin -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Attendance Modal -->
+    <div class="modal" id="attendanceModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalTitle">Add Attendance Record</h2>
+                <button class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="attendanceForm">
+                    {% csrf_token %}
+                    <input type="hidden" id="attendanceId" name="id">
+                    <div class="form-group">
+                        <label class="form-label">Student</label>
+                        <select class="form-control" id="studentSelect" name="student" required>
+                            <option value="">Select Student</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Group</label>
+                        <select class="form-control" id="groupSelect" name="group" required>
+                            <option value="">Select Group</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Date</label>
+                        <input type="date" class="form-control" id="dateInput" name="date" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Status</label>
+                        <select class="form-control" id="statusSelect" name="status" required>
+                            <option value="">Select Status</option>
+                            <option value="present">Present</option>
+                            <option value="absent">Absent</option>
+                            <option value="late">Late</option>
+                            <option value="excused">Excused</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Notes (Optional)</label>
+                        <textarea class="form-control" id="notesTextarea" name="notes" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="cancelBtn">Cancel</button>
+                <button class="btn btn-primary" id="saveBtn">Save Record</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('attendanceModal');
+            const addBtn = document.getElementById('addAttendanceBtn');
+            const closeBtn = document.querySelector('.close-btn');
+            const cancelBtn = document.getElementById('cancelBtn');
+            const saveBtn = document.getElementById('saveBtn');
+            const exportBtn = document.getElementById('exportBtn');
+            const filterForm = document.getElementById('filterForm');
+            let isEditMode = false;
+            let currentAttendanceId = null;
+
+            // Filter elementlari
+            const groupFilter = document.getElementById('groupFilter');
+            const dateFilter = document.getElementById('dateFilter');
+            const statusFilter = document.getElementById('statusFilter');
+
+            // Filter o'zgarishlarida formni yuborish
+            [groupFilter, dateFilter, statusFilter].forEach(filter => {
+                filter.addEventListener('change', function() {
+                    filterForm.submit();
+                });
+            });
+
+            // Export tugmasi
+            exportBtn.addEventListener('click', function() {
+                const params = new URLSearchParams(window.location.search);
+                window.location.href = '{% url "attendance_export" %}?' + params.toString();
+            });
+
+            // Modal ochish (qo'shish)
+            addBtn.addEventListener('click', function() {
+                isEditMode = false;
+                document.getElementById('modalTitle').textContent = 'Add Attendance Record';
+                document.getElementById('attendanceForm').reset();
+                loadFormData();
+                modal.style.display = 'flex';
+            });
+
+            // Modal yopish
+            function closeModal() {
+                modal.style.display = 'none';
+                isEditMode = false;
+                currentAttendanceId = null;
+            }
+
+            closeBtn.addEventListener('click', closeModal);
+            cancelBtn.addEventListener('click', closeModal);
+
+            // Tahrirlash tugmasi
+            document.querySelectorAll('.edit-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    isEditMode = true;
+                    currentAttendanceId = this.getAttribute('data-id');
+                    document.getElementById('modalTitle').textContent = 'Edit Attendance Record';
+                    loadAttendanceData(currentAttendanceId);
+                    modal.style.display = 'flex';
+                });
+            });
+
+            // O'chirish tugmasi
+            document.querySelectorAll('.delete-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const attendanceId = this.getAttribute('data-id');
+                    if (confirm('Are you sure you want to delete this attendance record?')) {
+                        deleteAttendance(attendanceId);
+                    }
+                });
+            });
+
+            // Form ma'lumotlarini yuklash
+            async function loadFormData() {
+                try {
+                    const response = await fetch('{% url "attendance_add" %}');
+                    const data = await response.json();
+
+                    const studentSelect = document.getElementById('studentSelect');
+                    const groupSelect = document.getElementById('groupSelect');
+
+                    // Studentlarni tozalash va to'ldirish
+                    studentSelect.innerHTML = '<option value="">Select Student</option>';
+                    data.students.forEach(student => {
+                        studentSelect.innerHTML += `<option value="${student.id}">${student.name}</option>`;
+                    });
+
+                    // Guruhlarni tozalash va to'ldirish
+                    groupSelect.innerHTML = '<option value="">Select Group</option>';
+                    data.groups.forEach(group => {
+                        groupSelect.innerHTML += `<option value="${group.id}">${group.name}</option>`;
+                    });
+
+                } catch (error) {
+                    console.error('Error loading form data:', error);
+                }
+            }
+
+            // Attendance ma'lumotlarini yuklash (tahrirlash uchun)
+            // Attendance ma'lumotlarini yuklash (tahrirlash uchun)
+async function loadAttendanceData(attendanceId) {
+    try {
+        const response = await fetch(`{% url "attendance_edit" 0 %}`.replace('0', attendanceId));
+        const data = await response.json();
+
+        // Remove the data.success check - GET request returns data directly
+        const attendance = data.attendance;
+        document.getElementById('attendanceId').value = attendance.id;
+        document.getElementById('dateInput').value = attendance.date;
+        document.getElementById('statusSelect').value = attendance.status;
+        document.getElementById('notesTextarea').value = attendance.notes || '';
+
+        // Student va group selectlarni to'ldirish
+        const studentSelect = document.getElementById('studentSelect');
+        const groupSelect = document.getElementById('groupSelect');
+
+        studentSelect.innerHTML = '<option value="">Select Student</option>';
+        data.students.forEach(student => {
+            studentSelect.innerHTML += `<option value="${student.id}" ${student.id == attendance.student_id ? 'selected' : ''}>${student.name}</option>`;
+        });
+
+        groupSelect.innerHTML = '<option value="">Select Group</option>';
+        data.groups.forEach(group => {
+            groupSelect.innerHTML += `<option value="${group.id}" ${group.id == attendance.group_id ? 'selected' : ''}>${group.name}</option>`;
+        });
+
+    } catch (error) {
+        console.error('Error loading attendance data:', error);
+        alert('Error loading attendance data');
+    }
+}
+
+            // Saqlash
+            // Saqlash
+saveBtn.addEventListener('click', async function() {
+    const formData = new FormData(document.getElementById('attendanceForm'));
+
+    try {
+        const url = isEditMode
+            ? `{% url "attendance_edit" 0 %}`.replace('0', currentAttendanceId)
+            : '{% url "attendance_add" %}';
+
+        const response = await fetch(url, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+            }
+        });
+
+        const data = await response.json();
+
+        // Check if success exists in response (for POST requests)
+        if (data.success) {
+            closeModal();
+            window.location.reload();
+        } else {
+            alert('Error: ' + (data.error || 'Unknown error occurred'));
+        }
+    } catch (error) {
+        console.error('Error saving attendance:', error);
+        alert('Error saving attendance record');
+    }
+});
+
+            // O'chirish
+            async function deleteAttendance(attendanceId) {
+                try {
+                    const response = await fetch(`{% url "attendance_delete" 0 %}`.replace('0', attendanceId), {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        }
+                    });
+
+                    const data = await response.json();
+
+                    if (data.success) {
+                        window.location.reload();
+                    } else {
+                        alert('Error deleting record');
+                    }
+                } catch (error) {
+                    console.error('Error deleting attendance:', error);
+                    alert('Error deleting attendance record');
+                }
+            }
+
+            // Tashqi joyni bosganda modal yopish
+            window.addEventListener('click', function(event) {
+                if (event.target === modal) {
+                    closeModal();
+                }
+            });
+        });
+
+        document.getElementById('studentSelect').addEventListener('change', function() {
+    let studentId = this.value;
+
+    if (studentId) {
+        fetch(`/get-student-groups/${studentId}/`)
+            .then(response => response.json())
+            .then(data => {
+                let groupSelect = document.getElementById('groupSelect');
+                groupSelect.innerHTML = ""; // eski qiymatlarni tozalash
+
+                if (data.success) {
+                    data.groups.forEach(group => {
+                        let option = document.createElement('option');
+                        option.value = group.id;
+                        option.textContent = group.name;
+                        groupSelect.appendChild(option);
+                    });
+                } else {
+                    alert("Xatolik: " + data.error);
+                }
+            });
+    }
+});
+
+    </script>
+</body>
+</html>

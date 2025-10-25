@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Samo Learning Center - Teacher Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        :root {
+            --primary: #2563EB;
+            --primary-dark: #1D4ED8;
+            --secondary: #FF6B35;
+            --light: #F3F4F6;
+            --dark: #1F2937;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --sidebar-width: 260px;
+            --header-height: 70px;
+            --border-radius: 12px;
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            background-color: #F5F7FB;
+            color: var(--dark);
+            display: flex;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--dark);
+            color: white;
+            height: 100vh;
+            position: fixed;
+            transition: var(--transition);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-logo {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 10px;
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        .sidebar-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .sidebar-menu {
+            padding: 20px 0;
+        }
+
+        .menu-label {
+            padding: 10px 20px;
+            font-size: 12px;
+            text-transform: uppercase;
+            color: #9CA3AF;
+            letter-spacing: 1px;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 14px 20px;
+            color: #E5E7EB;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .menu-item:hover, .menu-item.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-left: 4px solid var(--primary);
+        }
+
+        .menu-item i {
+            margin-right: 12px;
+            font-size: 18px;
+            width: 24px;
+            text-align: center;
+        }
+
+        /* Mobile Sidebar Toggle */
+        .sidebar-toggle {
+            display: none;
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            z-index: 1100;
+            background: var(--primary);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            justify-content: center;
+            align-items: center;
+            font-size: 18px;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            transition: var(--transition);
+            min-width: 0; /* Prevent flex overflow */
+        }
+
+        /* Header/Navbar Styles */
+        .header {
+            height: var(--header-height);
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 25px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .header-action {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--light);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-left: 15px;
+            cursor: pointer;
+            position: relative;
+            color: var(--dark);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--danger);
+            color: white;
+            font-size: 10px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            margin-left: 20px;
+            cursor: pointer;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: 600;
+            margin-right: 10px;
+        }
+
+        /* Dashboard Content Styles */
+        .dashboard {
+            padding: 25px;
+            min-height: calc(100vh - var(--header-height));
+        }
+
+        .welcome-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .welcome-message h1 {
+            font-size: clamp(20px, 4vw, 24px); /* Responsive font size */
+            color: var(--dark);
+            margin-bottom: 5px;
+        }
+
+        .welcome-message p {
+            color: #6B7280;
+            font-size: clamp(14px, 3vw, 16px);
+        }
+
+        .date-display {
+            background: white;
+            padding: 10px 20px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            font-weight: 500;
+            font-size: clamp(14px, 3vw, 16px);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 15px;
+            font-size: 24px;
+            color: white;
+            flex-shrink: 0; /* Prevent icon from shrinking */
+        }
+
+        .stat-icon.blue {
+            background: var(--primary);
+        }
+
+        .stat-icon.green {
+            background: var(--success);
+        }
+
+        .stat-icon.orange {
+            background: var(--warning);
+        }
+
+        .stat-icon.red {
+            background: var(--danger);
+        }
+
+        .stat-info h3 {
+            font-size: clamp(20px, 4vw, 24px);
+            margin-bottom: 5px;
+        }
+
+        .stat-info p {
+            color: #6B7280;
+            font-size: clamp(12px, 3vw, 14px);
+        }
+
+        .dashboard-section {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: clamp(16px, 4vw, 18px);
+            font-weight: 600;
+        }
+
+        .view-all {
+            color: var(--primary);
+            text-decoration: none;
+            font-size: clamp(12px, 3vw, 14px);
+            font-weight: 500;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 600px; /* Ensure table has minimum width for scrolling */
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #E5E7EB;
+            white-space: nowrap; /* Prevent text wrapping in table cells */
+        }
+
+        th {
+            font-weight: 600;
+            color: #6B7280;
+            font-size: 14px;
+        }
+
+        .status {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .status.pending {
+            background: #FEF3C7;
+            color: #92400E;
+        }
+
+        .status.completed {
+            background: #D1FAE5;
+            color: #065F46;
+        }
+
+        .status.overdue {
+            background: #FEE2E2;
+            color: #991B1B;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .badge.primary {
+            background: #DBEAFE;
+            color: var(--primary);
+        }
+
+        .badge.secondary {
+            background: #FFEDD5;
+            color: var(--warning);
+        }
+
+        .upcoming-classes {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .class-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            border-left: 4px solid var(--primary);
+        }
+
+        .class-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .class-title {
+            font-weight: 600;
+            font-size: clamp(14px, 3vw, 16px);
+        }
+
+        .class-time {
+            color: #6B7280;
+            font-size: clamp(12px, 3vw, 14px);
+        }
+
+        .class-details {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            font-size: clamp(12px, 3vw, 14px);
+            color: #6B7280;
+        }
+
+        .action-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: clamp(12px, 3vw, 14px);
+            min-height: 36px; /* Better touch target */
+        }
+
+        .action-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 1024px) {
+            .stats-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+            
+            .upcoming-classes {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 70px;
+                overflow: hidden;
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+                width: var(--sidebar-width);
+            }
+            
+            .sidebar-header, .menu-label, .menu-item span {
+                display: none;
+            }
+            
+            .sidebar.active .sidebar-header,
+            .sidebar.active .menu-label,
+            .sidebar.active .menu-item span {
+                display: flex;
+            }
+            
+            .menu-item {
+                justify-content: center;
+                padding: 18px;
+            }
+            
+            .sidebar.active .menu-item {
+                justify-content: flex-start;
+                padding: 14px 20px;
+            }
+            
+            .menu-item i {
+                margin-right: 0;
+                font-size: 20px;
+            }
+            
+            .sidebar.active .menu-item i {
+                margin-right: 12px;
+                font-size: 18px;
+            }
+            
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+            }
+            
+            .sidebar-toggle {
+                display: flex;
+            }
+            
+            .welcome-section {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .date-display {
+                margin-top: 10px;
+                width: 100%;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .upcoming-classes {
+                grid-template-columns: 1fr;
+            }
+            
+            table {
+                min-width: 800px; /* Wider minimum width for better scrolling */
+            }
+        }
+
+        @media (max-width: 576px) {
+            .header {
+                padding: 0 15px;
+            }
+            
+            .user-profile .user-name {
+                display: none;
+            }
+
+            .dashboard {
+                padding: 15px;
+            }
+            
+            .stat-card {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .stat-icon {
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+            
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .view-all {
+                margin-top: 10px;
+            }
+            
+            th, td {
+                padding: 8px 10px;
+                font-size: 12px;
+            }
+            
+            .action-btn {
+                padding: 6px 10px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .header-action {
+                margin-left: 10px;
+                width: 35px;
+                height: 35px;
+            }
+            
+            .user-avatar {
+                width: 35px;
+                height: 35px;
+                font-size: 14px;
+            }
+            
+            .dashboard {
+                padding: 10px;
+            }
+            
+            .stat-card {
+                padding: 15px;
+            }
+            
+            .dashboard-section {
+                padding: 15px;
+            }
+            
+            .class-card {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Mobile Sidebar Toggle -->
+    <button class="sidebar-toggle" id="sidebarToggle">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">S</div>
+            <div class="sidebar-title">Samo CRM</div>
+        </div>
+        
+        <div class="sidebar-menu">
+            <div class="menu-label">Main</div>
+            <a href="{% url 'teacher_dashboard' %}" class="menu-item active">
+                <i class="fas fa-home"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="{% url 'teacher_groups' %}" class="menu-item">
+                <i class="fas fa-graduation-cap"></i>
+                <span>My Classes</span>
+            </a>
+            <a href="{% url 'attendance' %}" class="menu-item">
+                <i class="fas fa-calendar-check"></i>
+                <span>Attendance</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header/Navbar -->
+        <header class="header">
+            <div class="header-left">
+                <!-- No burger icon as requested -->
+            </div>
+            
+            <div class="header-right">
+                <div class="header-action">
+                    <i class="far fa-bell"></i>
+                    <span class="notification-badge">3</span>
+                </div>
+                
+                <div class="user-profile">
+                    <div class="user-avatar">{{ teacher.user.first_name|first }}{{ teacher.user.last_name|first }}</div>
+                    <div class="user-name">{{ teacher.user.get_full_name }}</div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Teacher Dashboard Content -->
+        <div class="dashboard">
+            <div class="welcome-section">
+                <div class="welcome-message">
+                    <h1>Welcome back, {{ teacher.user.get_full_name }}!</h1>
+                    <p>Here's what's happening with your classes today.</p>
+                </div>
+                <div class="date-display">
+                    <i class="far fa-calendar-alt"></i>
+                    <span id="current-date">{{ today|date:"l, F d, Y" }}</span>
+                </div>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon blue">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>{{ total_students }}</h3>
+                        <p>Total Students</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon green">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>{{ active_classes_count }}</h3>
+                        <p>Active Classes</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon orange">
+                        <i class="fas fa-tasks"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>{{ pending_assignments }}</h3>
+                        <p>Pending Assignments</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon red">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>{{ average_performance }}%</h3>
+                        <p>Average Performance</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Upcoming Classes Section -->
+            <div class="dashboard-section">
+                <div class="section-header">
+                    <h2 class="section-title">Today's Classes</h2>
+                    <a href="{% url 'teacher_classes' %}" class="view-all">View All Classes</a>
+                </div>
+                <div class="upcoming-classes">
+                    {% for class in today_classes %}
+                    <div class="class-card">
+                        <div class="class-header">
+                            <div class="class-title">{{ class.group.name }} - {{ class.subject.name }}</div>
+                            <div class="class-time">
+                                {% if class.group.schedule %}
+                                    {{ class.group.schedule.time|default:"Time not set" }}
+                                {% else %}
+                                    Time not set
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div>Topic: Check schedule for details</div>
+                        <div class="class-details">
+                            <span>Status: {{ class.group.get_status_display }}</span>
+                            <span>{{ class.student_count }} Students</span>
+                        </div>
+{#                        <button class="action-btn" style="margin-top: 15px;">Take Attendance</button>#}
+                    </div>
+                    {% empty %}
+                    <div class="class-card">
+                        <div class="class-header">
+                            <div class="class-title">No classes scheduled for today</div>
+                        </div>
+                        <div>Check your full schedule for upcoming classes</div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Recent Homework Section -->
+            <div class="dashboard-section">
+                <div class="section-header">
+                    <h2 class="section-title">Recent Homework</h2>
+                    <a href="{% url 'teacher_homework' %}" class="view-all">View All Homework</a>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Subject</th>
+                                <th>Assigned To</th>
+                                <th>Due Date</th>
+                                <th>Status</th>
+{#                                <th>Action</th>#}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for homework in recent_homeworks %}
+                            <tr>
+                                <td>{{ homework.title }}</td>
+                                <td>{{ homework.subject.name }}</td>
+                                <td>{{ homework.assigned_to.name }}</td>
+                                <td>{{ homework.due_date|date:"M d, Y" }}</td>
+                                <td>
+                                    {% if homework.due_date < timezone.now %}
+                                        <span class="status overdue">Overdue</span>
+                                    {% else %}
+                                        <span class="status pending">Pending</span>
+                                    {% endif %}
+                                </td>
+{#                                <td><button class="action-btn">Review</button></td>#}
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="6" style="text-align: center;">No homework assignments yet</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Upcoming Exams Section -->
+            <div class="dashboard-section">
+                <div class="section-header">
+                    <h2 class="section-title">Upcoming Exams</h2>
+                    <a href="{% url 'teacher_exams' %}" class="view-all">View All Exams</a>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Exam Name</th>
+                                <th>Subject</th>
+                                <th>Class</th>
+                                <th>Date</th>
+                                <th>Max Score</th>
+{#                                <th>Action</th>#}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for exam in upcoming_exams %}
+                            <tr>
+                                <td>{{ exam.name }}</td>
+                                <td>{{ exam.subject.name }}</td>
+                                <td>{{ exam.group.name }}</td>
+                                <td>{{ exam.date|date:"M d, Y" }}</td>
+                                <td>{{ exam.max_score }}</td>
+{#                                <td><button class="action-btn">Prepare</button></td>#}
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="6" style="text-align: center;">No upcoming exams</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add active class to clicked menu items
+            const menuItems = document.querySelectorAll('.menu-item');
+            
+            menuItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    // Remove active class from all items
+                    menuItems.forEach(i => i.classList.remove('active'));
+
+                    // Add active class to clicked item
+                    this.classList.add('active');
+
+                    // Close sidebar on mobile after clicking a menu item
+                    if (window.innerWidth <= 768) {
+                        document.getElementById('sidebar').classList.remove('active');
+                    }
+                });
+            });
+
+            // Set current date (as backup)
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const currentDate = new Date().toLocaleDateString('en-US', options);
+            // Only set if not already set by Django
+            if (!document.getElementById('current-date').textContent) {
+                document.getElementById('current-date').textContent = currentDate;
+            }
+
+            // Mobile sidebar toggle
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            const sidebar = document.getElementById('sidebar');
+            
+            sidebarToggle.addEventListener('click', function() {
+                sidebar.classList.toggle('active');
+            });
+
+            // Close sidebar when clicking outside on mobile
+            document.addEventListener('click', function(event) {
+                if (window.innerWidth <= 768 && 
+                    sidebar.classList.contains('active') && 
+                    !sidebar.contains(event.target) && 
+                    !sidebarToggle.contains(event.target)) {
+                    sidebar.classList.remove('active');
+                }
+            });
+
+            // Handle window resize
+            window.addEventListener('resize', function() {
+                if (window.innerWidth > 768) {
+                    sidebar.classList.remove('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1209 @@
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Samo Learning Center - Admin Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Your CSS remains exactly the same */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        :root {
+            --primary: #2563EB;
+            --primary-dark: #1D4ED8;
+            --secondary: #FF6B35;
+            --light: #F3F4F6;
+            --dark: #1F2937;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --sidebar-width: 260px;
+            --header-height: 70px;
+            --border-radius: 12px;
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            background-color: #F5F7FB;
+            color: var(--dark);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--dark);
+            color: white;
+            height: 100vh;
+            position: fixed;
+            transition: var(--transition);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-logo {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 10px;
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        .sidebar-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .sidebar-menu {
+            padding: 20px 0;
+        }
+
+        .menu-label {
+            padding: 10px 20px;
+            font-size: 12px;
+            text-transform: uppercase;
+            color: #9CA3AF;
+            letter-spacing: 1px;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 14px 20px;
+            color: #E5E7EB;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .menu-item:hover, .menu-item.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-left: 4px solid var(--primary);
+        }
+
+        .menu-item i {
+            margin-right: 12px;
+            font-size: 18px;
+            width: 24px;
+            text-align: center;
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            transition: var(--transition);
+        }
+
+        /* Header/Navbar Styles */
+        .header {
+            height: var(--header-height);
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 25px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .header-action {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--light);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-left: 15px;
+            cursor: pointer;
+            position: relative;
+            color: var(--dark);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--danger);
+            color: white;
+            font-size: 10px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            margin-left: 20px;
+            cursor: pointer;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: 600;
+            margin-right: 10px;
+        }
+
+        /* Dashboard Content Styles */
+        .dashboard {
+            padding: 25px;
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            transition: var(--transition);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            margin-right: 15px;
+        }
+
+        .stat-icon.students {
+            background: rgba(37, 99, 235, 0.1);
+            color: var(--primary);
+        }
+
+        .stat-icon.teachers {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+
+        .stat-icon.subjects {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+        }
+
+        .stat-icon.payments {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+        }
+
+        .stat-info h3 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .stat-info p {
+            color: #6B7280;
+            font-size: 14px;
+        }
+
+        .charts-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .chart-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .card-action {
+            color: var(--primary);
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 250px;
+            width: 100%;
+        }
+
+        .data-table-container {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table th {
+            text-align: left;
+            padding: 12px 15px;
+            border-bottom: 1px solid #E5E7EB;
+            color: #6B7280;
+            font-weight: 500;
+        }
+
+        .data-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #F3F4F6;
+        }
+
+        .data-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .data-table tr:hover {
+            background-color: #F9FAFB;
+        }
+
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .status-badge.pending {
+            background: #FEF3C7;
+            color: #92400E;
+        }
+
+        .status-badge.completed {
+            background: #D1FAE5;
+            color: #065F46;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            transition: var(--transition);
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-secondary {
+            background: var(--light);
+            color: var(--dark);
+        }
+
+        .btn-secondary:hover {
+            background: #E5E7EB;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #E5E7EB;
+            margin-bottom: 20px;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: var(--transition);
+        }
+
+        .tab.active {
+            border-bottom: 2px solid var(--primary);
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #D1D5DB;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            .charts-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 70px;
+                overflow: hidden;
+            }
+
+            .sidebar-header, .menu-label, .menu-item span {
+                display: none;
+            }
+
+            .menu-item {
+                justify-content: center;
+                padding: 18px;
+            }
+
+            .menu-item i {
+                margin-right: 0;
+                font-size: 20px;
+            }
+
+            .main-content {
+                margin-left: 70px;
+            }
+
+            .sidebar:hover {
+                width: var(--sidebar-width);
+                z-index: 1001;
+            }
+
+            .sidebar:hover .sidebar-header,
+            .sidebar:hover .menu-label,
+            .sidebar:hover .menu-item span {
+                display: flex;
+            }
+
+            .sidebar:hover .menu-item {
+                justify-content: flex-start;
+                padding: 14px 20px;
+            }
+
+            .sidebar:hover .menu-item i {
+                margin-right: 12px;
+                font-size: 18px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .header {
+                padding: 0 15px;
+            }
+
+            .user-profile .user-name {
+                display: none;
+            }
+
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+
+            .dashboard {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">S</div>
+            <div class="sidebar-title">Samo CRM</div>
+        </div>
+
+        <div class="sidebar-menu">
+            <div class="menu-label">Main</div>
+            <a href="{% url 'admin_dashboard' %}" class="menu-item active">
+                <i class="fas fa-home"></i>
+                <span>Dashboard</span>
+            </a>
+            <div class="menu-label">User</div>
+            <a href="{% url 'admin_users_management' %}" class="menu-item ">
+                <i class="fas fa-user-friends"></i>
+                <span>Users</span>
+            </a>
+            <a href="{% url 'teachers_list' %}" class="menu-item ">
+                <i class="fas fa-chalkboard-teacher"></i>
+                <span>Teachers</span>
+            </a>
+            <a href="{% url 'student_list' %}" class="menu-item">
+                <i class="fas fa-users"></i>
+                <span>Students</span>
+            </a>
+            <div class="menu-label">Group</div>
+            <a href="{% url 'groups_list' %}" class="menu-item ">
+                <i class="fas fa-layer-group"></i>
+                <span>Groups</span>
+            </a>
+            <a href="{% url 'attendance_list' %}" class="menu-item">
+                <i class="fas fa-clipboard-check"></i>
+                <span>Attendance</span>
+            </a>
+            <div class="menu-label">Exam</div>
+            <a href="{% url 'exams:admin_exam_management' %}" class="menu-item">
+                <i class="fas fa-file-alt"></i>
+                <span>Exams</span>
+            </a>
+            <a href="{% url 'exams:admin_exam_results' %}" class="menu-item">
+                <i class="fas fa-chart-line"></i>
+                <span>Performance</span>
+            </a>
+            <div class="menu-label">Payment</div>
+            <a href="{% url 'payments:admin_payments_dashboard' %}" class="menu-item">
+                <i class="fas fa-money-check"></i>
+                <span>Payments</span>
+            </a>
+            <div class="menu-label">Education</div>
+            <a href="{% url 'education:courses_dashboard' %}" class="menu-item">
+                <i class="fas fa-graduation-cap"></i>
+                <span>Courses</span>
+            </a>
+            <a href="{% url 'education:admin_homework' %}" class="menu-item">
+                <i class="fas fa-tasks"></i>
+                <span>Assignments</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header/Navbar -->
+        <header class="header">
+            <div class="header-left">
+                <!-- No burger icon as requested -->
+            </div>
+
+            <div class="header-right">
+                <div class="header-action">
+                    <i class="far fa-bell"></i>
+                    <span class="notification-badge">3</span>
+                </div>
+
+                <div class="user-profile">
+                    <div class="user-avatar">{{ user.first_name|first }}{{ user.last_name|first }}</div>
+                    <div class="user-name">{{ user.get_full_name }}</div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard Content -->
+        <div class="dashboard">
+            <h1 class="page-title">
+                Dashboard Overview
+                <span>{{ current_date }}</span>
+            </h1>
+
+            <!-- Stats Cards -->
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="stat-icon students">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>{{ total_students }}</h3>
+                        <p>Total Students</p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon teachers">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>{{ total_teachers }}</h3>
+                        <p>Active Teachers</p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon subjects">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>{{ total_subjects }}</h3>
+                        <p>Subjects</p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon payments">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>${{ monthly_revenue }}</h3>
+                        <p>Monthly Revenue</p>
+                    </div>
+                </div>
+            </div>
+
+<!-- Charts Section -->
+<div class="charts-container">
+    <div class="chart-card">
+        <div class="card-header">
+            <h3 class="card-title">Student Performance</h3>
+            <span class="card-action">View Report</span>
+        </div>
+        <div class="chart-container">
+            <canvas id="performanceChart"></canvas>
+        </div>
+    </div>
+
+    <div class="chart-card">
+        <div class="card-header">
+            <h3 class="card-title">Attendance Rate</h3>
+            <span class="card-action">View Details</span>
+        </div>
+        <div class="chart-container">
+            <canvas id="attendanceChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<!-- Tabs for different data sections -->
+<div class="tabs">
+    <div class="tab active" data-tab="homework">Homework</div>
+    <div class="tab" data-tab="exams">Exams</div>
+    <div class="tab" data-tab="attendance">Attendance</div>
+    <div class="tab" data-tab="payments">Payments</div>
+</div>
+
+<!-- Homework Tab -->
+<div class="tab-content active" id="homework-tab">
+    <div class="data-table-container">
+        <div class="card-header">
+            <h3 class="card-title">Recent Homework Assignments</h3>
+        </div>
+
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Subject</th>
+                    <th>Assigned By</th>
+                    <th>Due Date</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for homework in recent_homework %}
+                <tr>
+                    <td>{{ homework.title }}</td>
+                    <td>{{ homework.subject.name }}</td>
+                    <td>{{ homework.assigned_by.user.get_full_name }}</td>
+                    <td>{{ homework.due_date|date:"M d, Y" }}</td>
+                    <td>
+                        <span class="status-badge {% if homework.due_date < today %}pending{% else %}completed{% endif %}">
+                            {% if homework.due_date < today %}Overdue{% else %}Active{% endif %}
+                        </span>
+                    </td>
+                    <td>
+                        <button class="btn btn-secondary">View</button>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" style="text-align: center;">No homework assignments found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Exams Tab -->
+<div class="tab-content" id="exams-tab">
+    <div class="data-table-container">
+        <div class="card-header">
+            <h3 class="card-title">Upcoming Exams</h3>
+
+        </div>
+
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Exam Name</th>
+                    <th>Subject</th>
+                    <th>Group</th>
+                    <th>Date</th>
+                    <th>Max Score</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for exam in upcoming_exams %}
+                <tr>
+                    <td>{{ exam.name }}</td>
+                    <td>{{ exam.subject.name }}</td>
+                    <td>{{ exam.group.name }}</td>
+                    <td>{{ exam.date|date:"M d, Y" }}</td>
+                    <td>{{ exam.max_score }}</td>
+                    <td>
+                        <button class="btn btn-secondary">View</button>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" style="text-align: center;">No upcoming exams found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Attendance Tab -->
+<div class="tab-content" id="attendance-tab">
+    <div class="data-table-container">
+        <div class="card-header">
+            <h3 class="card-title">Today's Attendance</h3>
+
+        </div>
+
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Student</th>
+                    <th>Group</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Recorded By</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for attendance in todays_attendance %}
+                <tr>
+                    <td>{{ attendance.student.user.get_full_name }}</td>
+                    <td>{{ attendance.group.name }}</td>
+                    <td>{{ attendance.date|date:"M d, Y" }}</td>
+                    <td>
+                        <span class="status-badge {% if attendance.status == 'present' %}completed{% else %}pending{% endif %}">
+                            {{ attendance.status|title }}
+                        </span>
+                    </td>
+                    <td>{{ attendance.recorded_by.user.get_full_name }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" style="text-align: center;">No attendance records for today.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Payments Tab -->
+<div class="tab-content" id="payments-tab">
+    <div class="data-table-container">
+        <div class="card-header">
+            <h3 class="card-title">Pending Payments</h3>
+
+        </div>
+
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Student</th>
+                    <th>Amount</th>
+                    <th>Due Date</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for payment in pending_payments %}
+                <tr>
+                    <td>{{ payment.student.user.get_full_name }}</td>
+                    <td>${{ payment.amount }}</td>
+                    <td>{{ payment.due_date|date:"M d, Y" }}</td>
+                    <td>
+                        <span class="status-badge {% if payment.due_date < today %}pending{% else %}completed{% endif %}">
+                            {% if payment.due_date < today %}Overdue{% else %}Pending{% endif %}
+                        </span>
+                    </td>
+                    <td>
+                        <button class="btn btn-secondary">Remind</button>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" style="text-align: center;">No pending payments found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+            <!-- Homework Tab -->
+            <div class="tab-content active" id="homework-tab">
+                <div class="data-table-container">
+                    <div class="card-header">
+                        <h3 class="card-title">Recent Homework Assignments</h3>
+                        <button class="btn btn-primary">Add New</button>
+                    </div>
+
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Subject</th>
+                                <th>Assigned By</th>
+                                <th>Due Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for homework in recent_homework %}
+                            <tr>
+                                <td>{{ homework.title }}</td>
+                                <td>{{ homework.subject.name }}</td>
+                                <td>{{ homework.assigned_by.user.get_full_name }}</td>
+                                <td>{{ homework.due_date|date:"M d, Y" }}</td>
+                                <td><span class="status-badge pending">Pending</span></td>
+                                <td>
+                                    <button class="btn btn-secondary">View</button>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="6" style="text-align: center;">No homework assignments found.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Exams Tab -->
+            <div class="tab-content" id="exams-tab">
+                <div class="data-table-container">
+                    <div class="card-header">
+                        <h3 class="card-title">Upcoming Exams</h3>
+                        <button class="btn btn-primary">Schedule Exam</button>
+                    </div>
+
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Exam Name</th>
+                                <th>Subject</th>
+                                <th>Group</th>
+                                <th>Date</th>
+                                <th>Max Score</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for exam in upcoming_exams %}
+                            <tr>
+                                <td>{{ exam.name }}</td>
+                                <td>{{ exam.subject.name }}</td>
+                                <td>{{ exam.group.name }}</td>
+                                <td>{{ exam.date|date:"M d, Y" }}</td>
+                                <td>{{ exam.max_score }}</td>
+                                <td>
+                                    <button class="btn btn-secondary">View</button>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="6" style="text-align: center;">No upcoming exams found.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Attendance Tab -->
+            <div class="tab-content" id="attendance-tab">
+                <div class="data-table-container">
+                    <div class="card-header">
+                        <h3 class="card-title">Today's Attendance</h3>
+                        <button class="btn btn-primary">Take Attendance</button>
+                    </div>
+
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Student</th>
+                                <th>Group</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Recorded By</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for attendance in todays_attendance %}
+                            <tr>
+                                <td>{{ attendance.student.user.get_full_name }}</td>
+                                <td>{{ attendance.group.name }}</td>
+                                <td>{{ attendance.date|date:"M d, Y" }}</td>
+                                <td>
+                                    <span class="status-badge {% if attendance.status == 'present' %}completed{% else %}pending{% endif %}">
+                                        {{ attendance.status|title }}
+                                    </span>
+                                </td>
+                                <td>{{ attendance.recorded_by.user.get_full_name }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5" style="text-align: center;">No attendance records for today.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Payments Tab -->
+            <div class="tab-content" id="payments-tab">
+                <div class="data-table-container">
+                    <div class="card-header">
+                        <h3 class="card-title">Pending Payments</h3>
+                        <button class="btn btn-primary">Record Payment</button>
+                    </div>
+
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Student</th>
+                                <th>Amount</th>
+                                <th>Due Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for payment in pending_payments %}
+                            <tr>
+                                <td>{{ payment.student.user.get_full_name }}</td>
+                                <td>${{ payment.amount }}</td>
+                                <td>{{ payment.due_date|date:"M d, Y" }}</td>
+                                <td>
+                                    <span class="status-badge pending">
+                                        {% if payment.due_date < today %}Overdue{% else %}Pending{% endif %}
+                                    </span>
+                                </td>
+                                <td>
+                                    <button class="btn btn-secondary">Remind</button>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5" style="text-align: center;">No pending payments found.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add active class to clicked menu items
+        const menuItems = document.querySelectorAll('.menu-item');
+
+        menuItems.forEach(item => {
+            item.addEventListener('click', function(e) {
+                // Remove active class from all items
+                menuItems.forEach(i => i.classList.remove('active'));
+
+                // Add active class to clicked item
+                this.classList.add('active');
+            });
+        });
+
+        // Tab functionality
+        const tabs = document.querySelectorAll('.tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                const tabId = this.getAttribute('data-tab');
+
+                // Remove active class from all tabs and contents
+                tabs.forEach(t => t.classList.remove('active'));
+                tabContents.forEach(c => c.classList.remove('active'));
+
+                // Add active class to clicked tab and corresponding content
+                this.classList.add('active');
+                document.getElementById(`${tabId}-tab`).classList.add('active');
+            });
+        });
+
+        // Parse JSON data from Django template
+        const performanceData = JSON.parse('{{ performance_data_json|escapejs }}');
+        const attendanceData = JSON.parse('{{ attendance_data_json|escapejs }}');
+
+        // Performance Chart
+        const performanceCtx = document.getElementById('performanceChart').getContext('2d');
+        const performanceChart = new Chart(performanceCtx, {
+            type: 'bar',
+            data: {
+                labels: performanceData.labels,
+                datasets: [{
+                    label: 'Average Score',
+                    data: performanceData.data,
+                    backgroundColor: [
+                        'rgba(37, 99, 235, 0.7)',
+                        'rgba(16, 185, 129, 0.7)',
+                        'rgba(245, 158, 11, 0.7)',
+                        'rgba(239, 68, 68, 0.7)',
+                        'rgba(139, 92, 246, 0.7)'
+                    ],
+                    borderColor: [
+                        '#2563EB',
+                        '#10B981',
+                        '#F59E0B',
+                        '#EF4444',
+                        '#8B5CF6'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        grid: {
+                            drawBorder: false
+                        },
+                        ticks: {
+                            callback: function(value) {
+                                return value + '%';
+                            }
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return `Score: ${context.raw}%`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Attendance Chart
+        const attendanceCtx = document.getElementById('attendanceChart').getContext('2d');
+        const attendanceChart = new Chart(attendanceCtx, {
+            type: 'line',
+            data: {
+                labels: attendanceData.labels,
+                datasets: [{
+                    label: 'Attendance Rate (%)',
+                    data: attendanceData.data,
+                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                    borderColor: '#10B981',
+                    borderWidth: 2,
+                    tension: 0.3,
+                    fill: true,
+                    pointBackgroundColor: '#10B981',
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2,
+                    pointRadius: 5,
+                    pointHoverRadius: 7
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        min: Math.max(0, Math.min(...attendanceData.data) - 10),
+                        max: 100,
+                        grid: {
+                            drawBorder: false
+                        },
+                        ticks: {
+                            callback: function(value) {
+                                return value + '%';
+                            }
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return `Attendance: ${context.raw}%`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Simulate loading data
+        setTimeout(() => {
+            // Update stats with animation
+            const statNumbers = document.querySelectorAll('.stat-info h3');
+            statNumbers.forEach(num => {
+                const originalText = num.textContent;
+
+                if (originalText.includes('$')) {
+                    const value = parseFloat(originalText.replace('$', '').replace(',', ''));
+                    animateValue(num, 0, value, 1500, '$');
+                } else {
+                    const value = parseInt(originalText.replace(',', ''));
+                    animateValue(num, 0, value, 1500);
+                }
+            });
+        }, 1000);
+
+        function animateValue(element, start, end, duration, prefix = '') {
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+
+                if (prefix === '$') {
+                    const value = (progress * (end - start) + start).toFixed(2);
+                    element.textContent = prefix + parseFloat(value).toLocaleString();
+                } else {
+                    const value = Math.floor(progress * (end - start) + start);
+                    element.textContent = prefix + value.toLocaleString();
+                }
+
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+
+        // Add refresh functionality to charts
+        document.querySelectorAll('.card-action').forEach(action => {
+            action.addEventListener('click', function() {
+                // You can implement AJAX calls here to refresh chart data
+                location.reload(); // Simple reload for now
+            });
+        });
+    });
+</script>
+</body>
+</html>

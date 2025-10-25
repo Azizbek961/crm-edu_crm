@@ -1,0 +1,1701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Samo Learning Center - Group Details</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        :root {
+            --primary: #2563EB;
+            --primary-dark: #1D4ED8;
+            --secondary: #FF6B35;
+            --light: #F3F4F6;
+            --dark: #1F2937;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --sidebar-width: 260px;
+            --header-height: 70px;
+            --border-radius: 12px;
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            background-color: #F5F7FB;
+            color: var(--dark);
+            display: flex;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--dark);
+            color: white;
+            height: 100vh;
+            position: fixed;
+            transition: var(--transition);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-logo {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 10px;
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        .sidebar-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .sidebar-menu {
+            padding: 20px 0;
+        }
+
+        .menu-label {
+            padding: 10px 20px;
+            font-size: 12px;
+            text-transform: uppercase;
+            color: #9CA3AF;
+            letter-spacing: 1px;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 14px 20px;
+            color: #E5E7EB;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .menu-item:hover, .menu-item.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-left: 4px solid var(--primary);
+        }
+
+        .menu-item i {
+            margin-right: 12px;
+            font-size: 18px;
+            width: 24px;
+            text-align: center;
+        }
+
+        /* Mobile Sidebar Toggle */
+        .sidebar-toggle {
+            display: none;
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            z-index: 1100;
+            background: var(--primary);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            justify-content: center;
+            align-items: center;
+            font-size: 18px;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            transition: var(--transition);
+            min-width: 0;
+        }
+
+        /* Header/Navbar Styles */
+        .header {
+            height: var(--header-height);
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 25px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .header-action {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--light);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-left: 15px;
+            cursor: pointer;
+            position: relative;
+            color: var(--dark);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--danger);
+            color: white;
+            font-size: 10px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            margin-left: 20px;
+            cursor: pointer;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: 600;
+            margin-right: 10px;
+        }
+
+        /* Dashboard Content Styles */
+        .dashboard {
+            padding: 25px;
+            min-height: calc(100vh - var(--header-height));
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .page-title {
+            font-size: clamp(20px, 4vw, 24px);
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            color: #6B7280;
+            font-size: clamp(12px, 3vw, 14px);
+            margin-bottom: 5px;
+            flex-wrap: wrap;
+        }
+
+        .breadcrumb a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .breadcrumb i {
+            margin: 0 10px;
+            font-size: 12px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: var(--border-radius);
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+            font-size: clamp(12px, 3vw, 14px);
+            min-height: 40px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-secondary {
+            background: var(--light);
+            color: var(--dark);
+        }
+
+        .btn-secondary:hover {
+            background: #E5E7EB;
+        }
+
+        /* Group Info Card */
+        .group-info-card {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+
+        .group-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .group-title {
+            font-size: clamp(18px, 4vw, 22px);
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 5px;
+        }
+
+        .group-subtitle {
+            color: #6B7280;
+            font-size: clamp(14px, 3vw, 16px);
+        }
+
+        .group-stats {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 10px 15px;
+            background: var(--light);
+            border-radius: var(--border-radius);
+            flex: 1;
+            min-width: 100px;
+        }
+
+        .stat-value {
+            font-size: clamp(20px, 4vw, 24px);
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: clamp(10px, 2vw, 12px);
+            color: #6B7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .group-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .detail-label {
+            font-size: clamp(10px, 2vw, 12px);
+            color: #6B7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 5px;
+        }
+
+        .detail-value {
+            font-size: clamp(14px, 3vw, 16px);
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        /* Tabs Navigation */
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #E5E7EB;
+            margin-bottom: 25px;
+            overflow-x: auto;
+            white-space: nowrap;
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+
+        .tabs::-webkit-scrollbar {
+            display: none; /* Chrome, Safari and Opera */
+        }
+
+        .tab {
+            padding: 12px 20px;
+            cursor: pointer;
+            font-weight: 500;
+            color: #6B7280;
+            border-bottom: 3px solid transparent;
+            transition: var(--transition);
+            font-size: clamp(14px, 3vw, 16px);
+        }
+
+        .tab.active {
+            color: var(--primary);
+            border-bottom: 3px solid var(--primary);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Students Table */
+        .students-table {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid #E5E7EB;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .table-title {
+            font-size: clamp(16px, 4vw, 18px);
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .search-box {
+            position: relative;
+            width: 100%;
+            max-width: 250px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 10px 15px 10px 40px;
+            border: 1px solid #E5E7EB;
+            border-radius: var(--border-radius);
+            font-size: 14px;
+            transition: var(--transition);
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6B7280;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 800px;
+        }
+
+        thead {
+            background: var(--light);
+        }
+
+        th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--dark);
+            font-size: clamp(12px, 2vw, 14px);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid #E5E7EB;
+            transition: var(--transition);
+        }
+
+        tbody tr:hover {
+            background: #F9FAFB;
+        }
+
+        td {
+            padding: 15px;
+            font-size: clamp(12px, 2vw, 14px);
+            color: var(--dark);
+            white-space: nowrap;
+        }
+
+        .student-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .student-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .student-name {
+            font-weight: 500;
+        }
+
+        .student-email {
+            font-size: clamp(10px, 2vw, 12px);
+            color: #6B7280;
+        }
+
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .status-active {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+
+        .status-pending {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+        }
+
+        .action-cell {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: var(--light);
+            color: var(--dark);
+            cursor: pointer;
+            transition: var(--transition);
+            flex-shrink: 0;
+        }
+
+        .action-btn:hover {
+            background: #E5E7EB;
+        }
+
+        .action-btn.edit {
+            color: var(--primary);
+        }
+
+        .action-btn.delete {
+            color: var(--danger);
+        }
+
+        /* Attendance Section */
+        .attendance-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .summary-card {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            text-align: center;
+        }
+
+        .summary-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 15px;
+            font-size: 20px;
+        }
+
+        .summary-icon.present {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+
+        .summary-icon.absent {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+        }
+
+        .summary-icon.late {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+        }
+
+        .summary-value {
+            font-size: clamp(20px, 4vw, 24px);
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .summary-label {
+            font-size: clamp(12px, 3vw, 14px);
+            color: #6B7280;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: var(--border-radius);
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid #E5E7EB;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: clamp(16px, 4vw, 18px);
+            font-weight: 600;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #6B7280;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: clamp(14px, 3vw, 16px);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 15px;
+            border-radius: 6px;
+            border: 1px solid #E5E7EB;
+            font-size: 14px;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 1024px) {
+            .group-details {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+
+            .attendance-summary {
+                grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: var(--sidebar-width);
+                transform: translateX(-100%);
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .sidebar-header, .menu-label, .menu-item span {
+                display: none;
+            }
+
+            .sidebar.active .sidebar-header,
+            .sidebar.active .menu-label,
+            .sidebar.active .menu-item span {
+                display: flex;
+            }
+
+            .menu-item {
+                justify-content: center;
+                padding: 18px;
+            }
+
+            .sidebar.active .menu-item {
+                justify-content: flex-start;
+                padding: 14px 20px;
+            }
+
+            .menu-item i {
+                margin-right: 0;
+                font-size: 20px;
+            }
+
+            .sidebar.active .menu-item i {
+                margin-right: 12px;
+                font-size: 18px;
+            }
+
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+            }
+
+            .sidebar-toggle {
+                display: flex;
+            }
+
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .action-buttons {
+                width: 100%;
+                justify-content: flex-end;
+            }
+
+            .group-header {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .group-stats {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .attendance-summary {
+                grid-template-columns: 1fr;
+            }
+
+            .table-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .search-box {
+                max-width: 100%;
+                width: 100%;
+            }
+
+            table {
+                min-width: 900px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .header {
+                padding: 0 15px;
+            }
+
+            .user-profile .user-name {
+                display: none;
+            }
+
+            .dashboard {
+                padding: 15px;
+            }
+
+            .group-info-card {
+                padding: 15px;
+            }
+
+            .students-table {
+                border-radius: 10px;
+            }
+
+            .table-header {
+                padding: 15px;
+            }
+
+            th, td {
+                padding: 10px;
+            }
+
+            .action-buttons {
+                justify-content: stretch;
+            }
+
+            .action-buttons .btn {
+                flex: 1;
+                justify-content: center;
+            }
+
+            .group-stats {
+                gap: 10px;
+            }
+
+            .stat-item {
+                min-width: 80px;
+                padding: 8px 10px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .header-action {
+                margin-left: 10px;
+                width: 35px;
+                height: 35px;
+            }
+
+            .user-avatar {
+                width: 35px;
+                height: 35px;
+                font-size: 14px;
+            }
+
+            .dashboard {
+                padding: 10px;
+            }
+
+            .group-info-card {
+                padding: 10px;
+            }
+
+            .table-header {
+                padding: 10px;
+            }
+
+            th, td {
+                padding: 8px;
+            }
+
+            .student-avatar {
+                width: 30px;
+                height: 30px;
+                font-size: 12px;
+            }
+
+            .action-btn {
+                width: 28px;
+                height: 28px;
+            }
+        }
+
+        .student-search-result:hover {
+            background-color: #f8f9fa !important;
+        }
+
+        .selected-student-card {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: var(--light);
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .text-muted {
+            color: #6B7280;
+        }
+
+        .student-search-result {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            border-bottom: 1px solid #f0f0f0;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 10px 15px;
+            border-radius: 6px;
+            border: 1px solid #E5E7EB;
+            font-size: 14px;
+            background-color: white;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%236B7280' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            background-size: 16px;
+        }
+
+        .form-select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <!-- Mobile Sidebar Toggle -->
+    <button class="sidebar-toggle" id="sidebarToggle">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">S</div>
+            <div class="sidebar-title">Samo CRM</div>
+        </div>
+
+        <div class="sidebar-menu">
+            <div class="menu-label">Main</div>
+            <a href="{% url 'teacher_dashboard' %}" class="menu-item">
+                <i class="fas fa-home"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="{% url 'teacher_groups' %}" class="menu-item active">
+                <i class="fas fa-graduation-cap"></i>
+                <span>My Classes</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header/Navbar -->
+        <header class="header">
+            <div class="header-left">
+                <!-- No burger icon as requested -->
+            </div>
+
+            <div class="header-right">
+                <div class="header-action">
+                    <i class="far fa-bell"></i>
+                    <span class="notification-badge">3</span>
+                </div>
+
+                <div class="user-profile">
+                    <div class="user-avatar">{{ request.user.first_name.0 }}{{ request.user.last_name.0 }}</div>
+                    <div class="user-name">{{ request.user.get_full_name }}</div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard Content -->
+        <div class="dashboard">
+            <div id="url-data"
+                 data-search-students-url="{% url 'available_students_search' group_id=group.id %}">
+            </div>
+            <div class="page-header">
+                <div>
+                    <div class="breadcrumb">
+                        <a href="{% url 'teacher_groups' %}">Groups</a> <i class="fas fa-chevron-right"></i> <span>{{ group.name }}</span>
+                    </div>
+                    <h1 class="page-title">Group Details</h1>
+                </div>
+                <div class="action-buttons">
+                    <button class="btn btn-secondary">
+                        <i class="fas fa-print"></i> Print Report
+                    </button>
+                    <button class="btn btn-primary" id="addStudentBtn">
+                        <i class="fas fa-plus"></i> Add Student
+                    </button>
+                </div>
+            </div>
+
+            <!-- Group Information Card -->
+            <div class="group-info-card">
+                <div class="group-header">
+                    <div>
+                        <h2 class="group-title">{{ group.name }}</h2>
+                        <p class="group-subtitle">Subject: {{ group.subject.name }}</p>
+                    </div>
+                    <div class="group-stats">
+                        <div class="stat-item">
+                            <div class="stat-value">{{ total_students }}</div>
+                            <div class="stat-label">Students</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">{{ overall_attendance }}%</div>
+                            <div class="stat-label">Attendance</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">{{ overall_average_score }}%</div>
+                            <div class="stat-label">Avg. Score</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="group-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Teacher</span>
+                        <span class="detail-value">{{ group.teacher.user.get_full_name }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Schedule</span>
+                        <span class="detail-value">
+                            {% if group.schedule.schedule_text %}
+                                {{ group.schedule.schedule_text }}
+                            {% else %}
+                                Schedule not set
+                            {% endif %}
+                        </span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Start Date</span>
+                        <span class="detail-value">{{ group.created_at|date:"F j, Y" }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Status</span>
+                        <span class="detail-value">{{ group.get_status_display }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Attendance Summary -->
+            <div class="attendance-summary">
+                <div class="summary-card">
+                    <div class="summary-icon present">
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <div class="summary-value">{{ attendance_stats.present|default:0 }}</div>
+                    <div class="summary-label">Present</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-icon absent">
+                        <i class="fas fa-times"></i>
+                    </div>
+                    <div class="summary-value">{{ attendance_stats.absent|default:0 }}</div>
+                    <div class="summary-label">Absent</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-icon late">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="summary-value">{{ attendance_stats.late|default:0 }}</div>
+                    <div class="summary-label">Late</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-icon" style="background: rgba(147, 51, 234, 0.1); color: #9333EA;">
+                        <i class="fas fa-user-clock"></i>
+                    </div>
+                    <div class="summary-value">{{ attendance_stats.excused|default:0 }}</div>
+                    <div class="summary-label">Excused</div>
+                </div>
+            </div>
+
+            <!-- Students Tab -->
+            <div class="tab-content active" id="students-tab">
+                <div class="students-table">
+                    <div class="table-header">
+                        <h3 class="table-title">Group Members</h3>
+                        <form method="GET" action="{% url 'group_detail' group.id %}" class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" name="search" placeholder="Search students..." value="{{ search_query }}">
+                        </form>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Student</th>
+                                    <th>Joined Date</th>
+                                    <th>Attendance</th>
+                                    <th>Avg. Score</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for member in members %}
+                                <tr>
+                                    <td>
+                                        <div class="student-info">
+                                            <div class="student-avatar">{{ member.student.user.first_name.0 }}{{ member.student.user.last_name.0 }}</div>
+                                            <div>
+                                                <div class="student-name">{{ member.student.user.get_full_name }}</div>
+                                                <div class="student-email">{{ member.student.user.email }}</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>{{ member.joined_date|date:"M j, Y" }}</td>
+                                    <td>{{ member.attendance_percentage }}%</td>
+                                    <td>{{ member.average_score }}%</td>
+                                    <td><span class="status-badge status-active">Active</span></td>
+                                    <td>
+                                        <div class="action-cell">
+                                            <div class="action-btn edit" title="Edit" data-student-id="{{ member.student.id }}" data-student-name="{{ member.student.user.get_full_name }}" data-student-email="{{ member.student.user.email }}" data-student-joined-date="{{ member.joined_date|date:'Y-m-d' }}" data-student-attendance="{{ member.attendance_percentage }}" data-student-score="{{ member.average_score }}">
+                                                <i class="fas fa-edit"></i>
+                                            </div>
+                                            <div class="action-btn delete" title="Remove" onclick="removeStudent({{ member.student.id }})">
+                                                <i class="fas fa-trash"></i>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="6" style="text-align: center; padding: 20px;">
+                                        No students found in this group.
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Updated Add Student Modal -->
+    <div class="modal" id="addStudentModal" data-group-id="{{ group.id }}">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Add Student to Group</h3>
+                <button class="modal-close" id="closeStudentModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <!-- Search Box -->
+                <div class="form-group">
+                    <label class="form-label" for="studentSearch">Search Students</label>
+                    <div class="search-box" style="position: relative;">
+                        <i class="fas fa-search"></i>
+                        <input type="text" class="form-control" id="studentSearch"
+                               placeholder="Type to search students by name or email..."
+                               style="padding-left: 40px;">
+                    </div>
+                </div>
+
+                <!-- Search Results -->
+                <div class="form-group">
+                    <label class="form-label">Select Student</label>
+                    <div id="searchResults" style="max-height: 300px; overflow-y: auto; border: 1px solid #E5E7EB; border-radius: 6px; padding: 10px;">
+                        <div class="text-center text-muted" id="searchResultsPlaceholder">
+                            Start typing to search for students...
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Selected Student (hidden by default) -->
+                <div class="form-group" id="selectedStudentSection" style="display: none; flex-direction: column; gap: 10px;">
+                    <label class="form-label">Selected Student</label>
+                    <div class="selected-student-card">
+                        <div class="student-avatar" id="selectedStudentAvatar" style="width: 40px; height: 40px; border-radius: 50%; background: var(--primary); display: flex; justify-content: center; align-items: center; color: white; font-weight: 600; margin-right: 12px;"></div>
+                        <div>
+                            <div class="student-name" id="selectedStudentName" style="font-weight: 500;"></div>
+                            <div class="student-email" id="selectedStudentEmail" style="font-size: 12px; color: #6B7280;"></div>
+                        </div>
+                        <button type="button" class="btn btn-secondary" id="clearSelection" style="margin-left: auto; padding: 5px 10px; font-size: 12px;">
+                            <i class="fas fa-times"></i> Change
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="cancelStudentBtn">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="confirmAddStudent" disabled>
+                        <i class="fas fa-plus"></i> Add Student
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Student Modal -->
+    <div class="modal" id="editStudentModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Edit Student Information</h3>
+                <button class="modal-close" id="closeEditModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="editStudentForm">
+                    <div class="form-group">
+                        <label class="form-label" for="editStudentName">Student Name</label>
+                        <input type="text" class="form-control" id="editStudentName" readonly>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="editStudentEmail">Email</label>
+                        <input type="email" class="form-control" id="editStudentEmail" readonly>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="editJoinedDate">Joined Date</label>
+                        <input type="date" class="form-control" id="editJoinedDate">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="editAttendance">Attendance Percentage</label>
+                        <input type="number" class="form-control" id="editAttendance" min="0" max="100" step="0.1">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="editAverageScore">Average Score</label>
+                        <input type="number" class="form-control" id="editAverageScore" min="0" max="100" step="0.1">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="editStatus">Status</label>
+                        <select class="form-select" id="editStatus">
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                            <option value="pending">Pending</option>
+                        </select>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="cancelEditBtn">Cancel</button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Save Changes
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+<script>
+    // --- 1. Yordamchi Funksiyalar ---
+
+    // CSRF tokenini olish
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    // --- 2. Talaba Qo'shish Modali Funksiyalari ---
+
+    let searchTimeout;
+
+    // Dinamik qidiruv funksiyasi
+    function searchStudents(searchTerm) {
+        const searchResults = document.getElementById('searchResults');
+        const modal = document.getElementById('addStudentModal');
+        const groupId = modal ? modal.dataset.groupId : null;
+
+        if (!groupId || !searchResults) return;
+
+        if (!searchTerm.trim()) {
+            searchResults.innerHTML = '<div class="text-center text-muted" id="searchResultsPlaceholder">Start typing to search for students...</div>';
+            return;
+        }
+
+        // Yuklanish (Loading) holatini dinamik ko'rsatish
+        searchResults.innerHTML = '<div class="text-center text-muted">Searching students...</div>';
+
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => {
+            const url = `/group/group/${groupId}/available-students/?search=${encodeURIComponent(searchTerm)}`;
+
+            fetch(url, {
+                method: 'GET',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRFToken': getCookie('csrftoken')
+                }
+            })
+            .then(response => {
+                // HTTP xatolarini mustahkam ushlash (404, 500)
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                searchResults.innerHTML = ''; // Eski natijalarni tozalash
+
+                if (data.success && data.students && data.students.length > 0) {
+                    data.students.forEach(student => {
+                        const studentElement = document.createElement('div');
+                        studentElement.className = 'student-search-result';
+                        studentElement.style.cssText = 'display: flex; align-items: center; padding: 12px; border-bottom: 1px solid #f0f0f0; transition: background-color 0.2s;';
+
+                        // Kontentni yaratish
+                        studentElement.innerHTML = `
+                            <div class="student-avatar" style="width: 36px; height: 36px; border-radius: 50%; background: var(--primary); display: flex; justify-content: center; align-items: center; color: white; font-weight: 600; margin-right: 12px; font-size: 14px;">
+                                ${student.initials}
+                            </div>
+                            <div style="flex: 1;">
+                                <div style="font-weight: 500;">${student.name}</div>
+                                <div style="font-size: 12px; color: #6B7280;">${student.email}</div>
+                            </div>
+                        `;
+
+                        // Tanlash tugmasi (Dinamik event listener biriktirish)
+                        const selectButton = document.createElement('button');
+                        selectButton.type = 'button';
+                        selectButton.className = 'select-student-btn';
+                        selectButton.textContent = 'Select';
+                        selectButton.setAttribute('data-student-id', student.id);
+                        selectButton.style.cssText = 'background: var(--primary); color: white; border: none; padding: 6px 12px; border-radius: 4px; font-size: 12px; cursor: pointer;';
+
+                        // ASOSIY TO'G'IRLASH: Tugmaga funksiyani to'g'ridan-to'g'ri biriktirish
+                        selectButton.addEventListener('click', () => {
+                            selectStudent(student.id, student.name, student.email, student.initials);
+                        });
+
+                        studentElement.appendChild(selectButton);
+
+                        // Hover effekti (dinamik stil)
+                        studentElement.addEventListener('mouseenter', function() {
+                            this.style.backgroundColor = '#f8f9fa';
+                        });
+                        studentElement.addEventListener('mouseleave', function() {
+                            this.style.backgroundColor = 'transparent';
+                        });
+
+                        searchResults.appendChild(studentElement);
+                    });
+                } else {
+                    let message = data.error || 'No students found matching your search.';
+                    searchResults.innerHTML = `<div class="text-center text-muted">${message}</div>`;
+                }
+            })
+            .catch(error => {
+                console.error('Error searching students:', error);
+                // Xato xabarini dinamik ravishda ko'rsatish
+                searchResults.innerHTML = `<div class="text-center text-muted" style="color: var(--danger);">Network error: ${error.message}. Please check console and try again.</div>`;
+            });
+        }, 500); // 500ms debounce
+    }
+
+    // Talabani tanlash (UI dinamikasi)
+    function selectStudent(studentId, studentName, studentEmail, studentInitials) {
+        document.getElementById('selectedStudentAvatar').textContent = studentInitials;
+        document.getElementById('selectedStudentName').textContent = studentName;
+        document.getElementById('selectedStudentEmail').textContent = studentEmail;
+
+        const selectedSection = document.getElementById('selectedStudentSection');
+        if (selectedSection) {
+            // style.css'ga mos kelishi uchun 'flex' tavsiya etiladi (yoki 'block' qoldiring)
+            selectedSection.style.display = 'flex';
+        }
+
+        document.getElementById('searchResults').innerHTML = '<div class="text-center text-muted">Student selected. Click "Add Student" to confirm.</div>';
+
+        // Tasdiqlash tugmasini faollashtirish
+        const confirmBtn = document.getElementById('confirmAddStudent');
+        if (confirmBtn) {
+             confirmBtn.disabled = false;
+             confirmBtn.setAttribute('data-student-id', studentId);
+        }
+
+        // Qidiruv maydonini yashirish (dinamiklikni kuchaytirish)
+        const studentSearchInput = document.getElementById('studentSearch');
+        if (studentSearchInput) {
+             studentSearchInput.style.display = 'none';
+        }
+    }
+
+    // Tanlovni tozalash (UI dinamikasi)
+    function clearSelection() {
+        const selectedSection = document.getElementById('selectedStudentSection');
+        if (selectedSection) selectedSection.style.display = 'none';
+
+        const confirmBtn = document.getElementById('confirmAddStudent');
+        if (confirmBtn) {
+            confirmBtn.disabled = true;
+            confirmBtn.removeAttribute('data-student-id');
+        }
+
+        const studentSearch = document.getElementById('studentSearch');
+        if (studentSearch) {
+            studentSearch.value = '';
+            studentSearch.style.display = 'block'; // Qidiruv maydonini qaytarish
+        }
+        document.getElementById('searchResults').innerHTML = '<div class="text-center text-muted" id="searchResultsPlaceholder">Start typing to search for students...</div>';
+    }
+
+    // Talabani guruhga qo'shish (AJAX POST)
+    function addStudentToGroup(studentId) {
+        const modal = document.getElementById('addStudentModal');
+        const groupId = modal ? modal.dataset.groupId : null;
+
+        if (!groupId || !studentId) return;
+
+        fetch(`/group/group/${groupId}/add-student/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRFToken': getCookie('csrftoken'),
+                'X-Requested-With': 'XMLHttpRequest',
+            },
+            body: `student_id=${studentId}`
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                alert('Student added successfully!');
+                if (modal) modal.classList.remove('active');
+                window.location.reload();
+            } else {
+                alert('Error: ' + (data.error || 'Unknown error'));
+            }
+        })
+        .catch(error => {
+            console.error('Error adding student:', error);
+            alert(`An error occurred: ${error.message}. Please try again.`);
+        });
+    }
+
+    // Talabani guruhdan olib tashlash (AJAX POST)
+    function removeStudent(studentId) {
+        if (!confirm('Are you sure you want to remove this student from the group?')) {
+            return;
+        }
+
+        // Django template tagidan URL ni dinamik yaratish
+        const removeUrl = `{% url 'remove_student_from_group' group.id 0 %}`.replace('0', studentId);
+
+        fetch(removeUrl, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken'),
+                'X-Requested-With': 'XMLHttpRequest',
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                alert('Student removed successfully!');
+                window.location.reload();
+            } else {
+                alert('Error: ' + (data.error || 'Unknown error'));
+            }
+        })
+        .catch(error => {
+            console.error('Error removing student:', error);
+            alert(`An error occurred: ${error.message}. Please try again.`);
+        });
+    }
+
+    // Talaba ma'lumotlarini yangilash (AJAX POST)
+    function updateStudent(studentId, formData) {
+
+
+        fetch(updateUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRFToken': getCookie('csrftoken'),
+                'X-Requested-With': 'XMLHttpRequest',
+            },
+            body: new URLSearchParams(formData)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                alert('Student information updated successfully!');
+                document.getElementById('editStudentModal').classList.remove('active');
+                window.location.reload();
+            } else {
+                alert('Error: ' + (data.error || 'Unknown error'));
+            }
+        })
+        .catch(error => {
+            console.error('Error updating student:', error);
+            alert(`An error occurred: ${error.message}. Please try again.`);
+        });
+    }
+
+    // Edit modalini ochish
+    function openEditModal(studentId, studentName, studentEmail, joinedDate, attendance, score) {
+        // Form elementlarini topish
+        const nameInput = document.getElementById('editStudentName');
+        const emailInput = document.getElementById('editStudentEmail');
+        const joinedDateInput = document.getElementById('editJoinedDate');
+        const attendanceInput = document.getElementById('editAttendance');
+        const scoreInput = document.getElementById('editAverageScore');
+        const statusSelect = document.getElementById('editStatus');
+
+        // Form elementlariga qiymatlarini berish
+        if (nameInput) nameInput.value = studentName;
+        if (emailInput) emailInput.value = studentEmail;
+        if (joinedDateInput) joinedDateInput.value = joinedDate;
+        if (attendanceInput) attendanceInput.value = attendance;
+        if (scoreInput) scoreInput.value = score;
+
+        // Formni student ID bilan belgilash
+        const form = document.getElementById('editStudentForm');
+        if (form) form.dataset.studentId = studentId;
+
+        // Modalni ochish
+        document.getElementById('editStudentModal').classList.add('active');
+    }
+
+    // --- DOMContentLoaded asosiy funksiyasi (Event Listeners) ---
+    document.addEventListener('DOMContentLoaded', function() {
+        // Sidebar toggle funksiyasi
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const sidebar = document.getElementById('sidebar');
+
+        if (sidebarToggle && sidebar) {
+            sidebarToggle.addEventListener('click', function() {
+                sidebar.classList.toggle('active');
+            });
+        }
+
+        // Menu item faollashtirish
+        const menuItems = document.querySelectorAll('.menu-item');
+        menuItems.forEach(item => {
+            item.addEventListener('click', function() {
+                menuItems.forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Add Student Modal elementlari
+        const addStudentBtn = document.getElementById('addStudentBtn');
+        const addStudentModal = document.getElementById('addStudentModal');
+        const studentSearch = document.getElementById('studentSearch');
+        const confirmAddStudent = document.getElementById('confirmAddStudent');
+        const closeStudentModal = document.getElementById('closeStudentModal');
+        const cancelStudentBtn = document.getElementById('cancelStudentBtn');
+
+        // Qidiruv funksiyasini biriktirish (Dinamiklik)
+        if (studentSearch) {
+            studentSearch.addEventListener('input', function() {
+                // Har bir kiritilgan ma'lumotni searchStudents funksiyasiga yuboradi
+                searchStudents(this.value);
+            });
+        }
+
+        // Tasdiqlash tugmasi
+        if (confirmAddStudent) {
+            confirmAddStudent.addEventListener('click', function() {
+                const studentId = this.getAttribute('data-student-id');
+                if (studentId) {
+                    addStudentToGroup(studentId);
+                }
+            });
+        }
+
+        // Tozalash tugmasi
+        const clearSelectionBtn = document.getElementById('clearSelection');
+        if (clearSelectionBtn) {
+            clearSelectionBtn.addEventListener('click', clearSelection);
+        }
+
+        // Modal ochish
+        if (addStudentBtn) {
+            addStudentBtn.addEventListener('click', function() {
+                clearSelection();
+                if (addStudentModal) addStudentModal.classList.add('active');
+                setTimeout(() => {
+                    if (studentSearch) studentSearch.focus();
+                }, 100);
+            });
+        }
+
+        // Modalni yopish funksiyasi
+        const closeModal = () => {
+            if (addStudentModal) addStudentModal.classList.remove('active');
+            clearSelection();
+        };
+
+        if (closeStudentModal) closeStudentModal.addEventListener('click', closeModal);
+        if (cancelStudentBtn) cancelStudentBtn.addEventListener('click', closeModal);
+
+        // Edit Student Modal elementlari
+        const editStudentModal = document.getElementById('editStudentModal');
+        const closeEditModal = document.getElementById('closeEditModal');
+        const cancelEditBtn = document.getElementById('cancelEditBtn');
+        const editStudentForm = document.getElementById('editStudentForm');
+
+        // Edit modalini yopish
+        const closeEditModalFunc = () => {
+            if (editStudentModal) editStudentModal.classList.remove('active');
+        };
+
+        if (closeEditModal) closeEditModal.addEventListener('click', closeEditModalFunc);
+        if (cancelEditBtn) cancelEditBtn.addEventListener('click', closeEditModalFunc);
+
+        // Edit formni yuborish
+        if (editStudentForm) {
+            editStudentForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                const studentId = this.dataset.studentId;
+                const formData = {
+                    joined_date: document.getElementById('editJoinedDate').value,
+                    attendance_percentage: document.getElementById('editAttendance').value,
+                    average_score: document.getElementById('editAverageScore').value,
+                    status: document.getElementById('editStatus').value
+                };
+
+                updateStudent(studentId, formData);
+            });
+        }
+
+        // Edit tugmalariga event listener qo'shish
+        const editButtons = document.querySelectorAll('.action-btn.edit');
+        editButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const studentId = this.dataset.studentId;
+                const studentName = this.dataset.studentName;
+                const studentEmail = this.dataset.studentEmail;
+                const joinedDate = this.dataset.studentJoinedDate;
+                const attendance = this.dataset.studentAttendance;
+                const score = this.dataset.studentScore;
+
+                openEditModal(studentId, studentName, studentEmail, joinedDate, attendance, score);
+            });
+        });
+
+        // Tashqi tomonga bosilganda modalni yopish
+        window.addEventListener('click', function(e) {
+            if (e.target === addStudentModal) {
+                closeModal();
+            }
+            if (e.target === editStudentModal) {
+                closeEditModalFunc();
+            }
+        });
+    });
+    console.log('Group ID:', groupId);
+    console.log('Search URL:', url);
+    console.log('Full URL being requested:', `${window.location.origin}${url}`);
+</script>
+</body>
+</html>

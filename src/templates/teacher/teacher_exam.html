@@ -1,0 +1,1488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Samo Learning Center - Exam Management</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        :root {
+            --primary: #2563EB;
+            --primary-dark: #1D4ED8;
+            --secondary: #FF6B35;
+            --light: #F3F4F6;
+            --dark: #1F2937;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --sidebar-width: 260px;
+            --header-height: 70px;
+            --border-radius: 12px;
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            background-color: #F5F7FB;
+            color: var(--dark);
+            display: flex;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--dark);
+            color: white;
+            height: 100vh;
+            position: fixed;
+            transition: var(--transition);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-logo {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 10px;
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        .sidebar-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .sidebar-menu {
+            padding: 20px 0;
+        }
+
+        .menu-label {
+            padding: 10px 20px;
+            font-size: 12px;
+            text-transform: uppercase;
+            color: #9CA3AF;
+            letter-spacing: 1px;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 14px 20px;
+            color: #E5E7EB;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .menu-item:hover, .menu-item.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-left: 4px solid var(--primary);
+        }
+
+        .menu-item i {
+            margin-right: 12px;
+            font-size: 18px;
+            width: 24px;
+            text-align: center;
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            transition: var(--transition);
+            width: calc(100% - var(--sidebar-width));
+        }
+
+        /* Header/Navbar Styles */
+        .header {
+            height: var(--header-height);
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 25px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--dark);
+            cursor: pointer;
+            margin-right: 15px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .header-left {
+            display: flex;
+        }
+
+        .header-action {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--light);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-left: 15px;
+            cursor: pointer;
+            position: relative;
+            color: var(--dark);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--danger);
+            color: white;
+            font-size: 10px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            margin-left: 20px;
+            cursor: pointer;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: 600;
+            margin-right: 10px;
+        }
+
+        /* Exam Content Styles */
+        .exam {
+            padding: 25px;
+            min-height: calc(100vh - var(--header-height));
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: var(--border-radius);
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-secondary {
+            background: var(--light);
+            color: var(--dark);
+        }
+
+        .btn-secondary:hover {
+            background: #E5E7EB;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #0D9C6F;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #DC2626;
+        }
+
+        .tabs {
+            display: flex;
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 5px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 12px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: var(--transition);
+            font-weight: 500;
+            min-width: 120px;
+        }
+
+        .tab.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .filters {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .filter-select {
+            padding: 10px 15px;
+            border-radius: var(--border-radius);
+            border: 1px solid #D1D5DB;
+            background: white;
+            font-size: 14px;
+            min-width: 150px;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .search-box {
+            position: relative;
+            flex: 1;
+            max-width: 300px;
+            min-width: 200px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 10px 15px 10px 40px;
+            border-radius: var(--border-radius);
+            border: 1px solid #D1D5DB;
+            font-size: 14px;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6B7280;
+        }
+
+        /* Exam Table Styles */
+        .exam-table {
+            background: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+            overflow-x: auto;
+        }
+
+        .table-container {
+            min-width: 800px;
+        }
+
+        .table-header {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1fr 120px;
+            padding: 15px 20px;
+            background: #F9FAFB;
+            font-weight: 600;
+            color: #6B7280;
+            font-size: 14px;
+            border-bottom: 1px solid #F3F4F6;
+        }
+
+        .table-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1fr 120px;
+            padding: 15px 20px;
+            border-bottom: 1px solid #F3F4F6;
+            align-items: center;
+            transition: var(--transition);
+        }
+
+        .table-row:hover {
+            background: #F9FAFB;
+        }
+
+        .table-row:last-child {
+            border-bottom: none;
+        }
+
+        .exam-name {
+            font-weight: 600;
+            color: var(--dark);
+            word-break: break-word;
+        }
+
+        .exam-subject {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .subject-badge {
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .badge-math {
+            background: #E0F2FE;
+            color: #0369A1;
+        }
+
+        .badge-science {
+            background: #F0FDF4;
+            color: #15803D;
+        }
+
+        .badge-english {
+            background: #FEF7CD;
+            color: #854D0E;
+        }
+
+        .badge-history {
+            background: #F3E8FF;
+            color: #7C3AED;
+        }
+
+        .exam-date {
+            color: #6B7280;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+
+        .exam-score {
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .exam-status {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .status-upcoming {
+            background: #FEF3C7;
+            color: #D97706;
+        }
+
+        .status-completed {
+            background: #DCFCE7;
+            color: #16A34A;
+        }
+
+        .status-in-progress {
+            background: #DBEAFE;
+            color: #1D4ED8;
+        }
+
+        .exam-actions {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-start;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--light);
+            color: var(--dark);
+            cursor: pointer;
+            transition: var(--transition);
+            flex-shrink: 0;
+        }
+
+        .action-btn:hover {
+            background: #E5E7EB;
+        }
+
+        .action-btn.edit:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .action-btn.results:hover {
+            background: var(--success);
+            color: white;
+        }
+
+        .action-btn.delete:hover {
+            background: var(--danger);
+            color: white;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: var(--border-radius);
+            width: 100%;
+            max-width: 800px;
+            max-height: calc(100vh - 40px);
+            overflow-y: auto;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid #F3F4F6;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #6B7280;
+            transition: var(--transition);
+        }
+
+        .close-modal:hover {
+            color: var(--dark);
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 10px 15px;
+            border-radius: var(--border-radius);
+            border: 1px solid #D1D5DB;
+            font-size: 14px;
+            transition: var(--transition);
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .form-textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .modal-footer {
+            padding: 20px;
+            border-top: 1px solid #F3F4F6;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        /* Results Modal Styles */
+        .results-table-container {
+            overflow-x: auto;
+        }
+
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            min-width: 600px;
+        }
+
+        .results-table th {
+            text-align: left;
+            padding: 12px 15px;
+            background: #F9FAFB;
+            font-weight: 600;
+            color: #6B7280;
+            font-size: 14px;
+            border-bottom: 1px solid #F3F4F6;
+        }
+
+        .results-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #F3F4F6;
+        }
+
+        .results-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .results-table tr:hover {
+            background: #F9FAFB;
+        }
+
+        .score-input {
+            width: 80px;
+            padding: 8px 10px;
+            border-radius: 6px;
+            border: 1px solid #D1D5DB;
+            text-align: center;
+        }
+
+        /* Mobile Card View for Exams */
+        .exam-cards {
+            display: none;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .exam-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
+        }
+
+        .exam-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .exam-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .exam-card-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--dark);
+            word-break: break-word;
+            flex: 1;
+        }
+
+        .exam-card-status {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .exam-card-details {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .exam-card-detail {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            color: #6B7280;
+        }
+
+        .exam-card-detail i {
+            width: 16px;
+            color: var(--primary);
+        }
+
+        .exam-card-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+        }
+
+        /* Overlay for mobile sidebar */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+        
+        .sidebar-overlay.active {
+            display: block;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 1200px) {
+            .table-container {
+                min-width: 700px;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+                width: 280px;
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+            }
+            
+            .menu-toggle {
+                display: block;
+            }
+
+            .tabs {
+                flex-direction: column;
+            }
+            
+            .tab {
+                min-width: auto;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .exam-table {
+                display: none;
+            }
+            
+            .exam-cards {
+                display: flex;
+            }
+            
+            .filters {
+                flex-direction: column;
+            }
+            
+            .filter-select, .search-box {
+                min-width: 100%;
+                max-width: 100%;
+            }
+            
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .header {
+                padding: 0 15px;
+            }
+            
+            .user-profile .user-name {
+                display: none;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .modal-footer {
+                justify-content: center;
+            }
+            
+            .modal-footer .btn {
+                flex: 1;
+                min-width: 120px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .exam {
+                padding: 15px;
+            }
+            
+            .exam-card {
+                padding: 15px;
+            }
+            
+            .modal-content {
+                margin: 10px;
+            }
+            
+            .modal-header, .modal-body, .modal-footer {
+                padding: 15px;
+            }
+            
+            .btn {
+                padding: 8px 16px;
+                font-size: 14px;
+            }
+            
+            .header-action {
+                width: 35px;
+                height: 35px;
+                margin-left: 10px;
+            }
+            
+            .user-avatar {
+                width: 35px;
+                height: 35px;
+                font-size: 14px;
+            }
+            
+            .exam-card-actions {
+                justify-content: space-between;
+            }
+            
+            .action-btn {
+                width: 36px;
+                height: 36px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .exam-card-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .exam-card-actions {
+                width: 100%;
+                justify-content: space-between;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar Overlay for Mobile -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">S</div>
+            <div class="sidebar-title">Samo CRM</div>
+        </div>
+        
+        <div class="sidebar-menu">
+            <div class="menu-label">Main</div>
+            <a href="#" class="menu-item">
+                <i class="fas fa-home"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="#" class="menu-item">
+                <i class="fas fa-graduation-cap"></i>
+                <span>Courses</span>
+            </a>
+            <a href="#" class="menu-item">
+                <i class="fas fa-users"></i>
+                <span>Students</span>
+            </a>
+
+            <div class="menu-label">Management</div>
+            <a href="#" class="menu-item">
+                <i class="fas fa-calendar-alt"></i>
+                <span>Schedule</span>
+            </a>
+            <a href="#" class="menu-item">
+                <i class="fas fa-tasks"></i>
+                <span>Assignments</span>
+            </a>
+            <a href="{% url 'exams:teacher_exam_management' %}" class="menu-item active">
+                <i class="fas fa-file-alt"></i>
+                <span>Exams</span>
+            </a>
+            <a href="#" class="menu-item">
+                <i class="fas fa-chart-line"></i>
+                <span>Performance</span>
+            </a>
+
+            <div class="menu-label">Settings</div>
+            <a href="#" class="menu-item">
+                <i class="fas fa-cog"></i>
+                <span>Settings</span>
+            </a>
+            <a href="#" class="menu-item">
+                <i class="fas fa-question-circle"></i>
+                <span>Help & Support</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header/Navbar -->
+        <header class="header">
+            <div class="header-left">
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h2>Exam Management</h2>
+            </div>
+
+            <div class="header-right">
+                <div class="header-action">
+                    <i class="far fa-bell"></i>
+                    <span class="notification-badge">3</span>
+                </div>
+
+                <div class="user-profile">
+                    <div class="user-avatar">{{ request.user.first_name|first|upper }}{{ request.user.last_name|first|upper }}</div>
+                    <div class="user-name">{{ request.user.get_full_name|default:request.user.username }}</div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Exam Content -->
+        <div class="exam">
+            <div class="page-header">
+                <h1 class="page-title">Exam Management</h1>
+                <button class="btn btn-primary" id="addExamBtn">
+                    <i class="fas fa-plus"></i> Add Exam
+                </button>
+            </div>
+
+            <!-- Display Messages -->
+            {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}" style="padding: 10px; margin-bottom: 20px; border-radius: 8px;
+                    {% if message.tags == 'success' %}background: #DCFCE7; color: #16A34A; border: 1px solid #BBF7D0;{% endif %}
+                    {% if message.tags == 'error' %}background: #FEE2E2; color: #DC2626; border: 1px solid #FECACA;{% endif %}
+                    {% if message.tags == 'warning' %}background: #FEF3C7; color: #D97706; border: 1px solid #FDE68A;{% endif %}">
+                    {{ message }}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <div class="tabs">
+                <div class="tab {% if active_tab == 'upcoming' %}active{% endif %}" data-tab="upcoming">Upcoming Exams ({{ upcoming_exams.count }})</div>
+                <div class="tab {% if active_tab == 'completed' %}active{% endif %}" data-tab="completed">Completed Exams ({{ completed_exams.count }})</div>
+                <div class="tab {% if active_tab == 'all' %}active{% endif %}" data-tab="all">All Exams ({{ all_exams.count }})</div>
+            </div>
+
+            <form method="GET" id="filterForm">
+                <div class="filters">
+                    <select class="filter-select" name="subject" id="subjectFilter">
+                        <option value="">All Subjects</option>
+                        {% for subject in subjects %}
+                        <option value="{{ subject.id }}" {% if current_filters.subject == subject.id|stringformat:"i" %}selected{% endif %}>
+                            {{ subject.name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+
+                    <select class="filter-select" name="group" id="groupFilter">
+                        <option value="">All Groups</option>
+                        {% for group in groups %}
+                        <option value="{{ group.id }}" {% if current_filters.group == group.id|stringformat:"i" %}selected{% endif %}>
+                            {{ group.name }} - {{ group.subject.name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+
+                    <div class="search-box">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" class="search-input" name="search" placeholder="Search exams..." value="{{ current_filters.search }}">
+                    </div>
+
+                    <input type="hidden" name="tab" id="tabInput" value="{{ active_tab }}">
+                    <button type="submit" class="btn btn-secondary" style="display: none;">Apply</button>
+                </div>
+            </form>
+
+            <!-- Desktop Table View -->
+            <div class="exam-table">
+                <div class="table-container">
+                    <div class="table-header">
+                        <div>Exam Name</div>
+                        <div>Subject</div>
+                        <div>Group</div>
+                        <div>Date</div>
+                        <div>Max Score</div>
+                        <div>Status</div>
+                        <div>Actions</div>
+                    </div>
+                    <div id="examTableBody">
+                        {% for exam in display_exams %}
+                        <div class="table-row">
+                            <div class="exam-name">{{ exam.name }}</div>
+                            <div class="exam-subject">
+                                <span class="subject-badge badge-{{ exam.subject.name|lower }}">{{ exam.subject.name }}</span>
+                            </div>
+                            <div>{{ exam.group.name }}</div>
+                            <div class="exam-date">{{ exam.date|date:"M d, Y" }}</div>
+                            <div class="exam-score">{{ exam.max_score }}</div>
+                            <div class="exam-status status-{{ exam.status }}">
+                                {% if exam.date > now %}Upcoming
+                                {% elif exam.date <= now %}Completed
+                                {% else %}In Progress{% endif %}
+                            </div>
+                            <div class="exam-actions">
+                                <div class="action-btn edit" data-id="{{ exam.id }}" title="Edit Exam">
+                                    <i class="fas fa-edit"></i>
+                                </div>
+                                <div class="action-btn results" data-id="{{ exam.id }}" title="View Results">
+                                    <i class="fas fa-chart-bar"></i>
+                                </div>
+                                <div class="action-btn delete" data-id="{{ exam.id }}" title="Delete Exam">
+                                    <i class="fas fa-trash"></i>
+                                </div>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <div class="table-row" style="display: block; text-align: center; padding: 40px; grid-template-columns: 1fr;">
+                            <div style="color: #6B7280;">
+                                <i class="fas fa-inbox" style="font-size: 40px; margin-bottom: 10px;"></i>
+                                <p>No exams found</p>
+                                <p style="font-size: 14px; margin-top: 5px;">Try adjusting your filters or create a new exam.</p>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mobile Card View -->
+            <div class="exam-cards" id="examCards">
+                {% for exam in display_exams %}
+                <div class="exam-card">
+                    <div class="exam-card-header">
+                        <div class="exam-card-title">{{ exam.name }}</div>
+                        <div class="exam-card-status status-{{ exam.status }}">
+                            {% if exam.date > now %}Upcoming
+                            {% elif exam.date <= now %}Completed
+                            {% else %}In Progress{% endif %}
+                        </div>
+                    </div>
+                    <div class="exam-card-details">
+                        <div class="exam-card-detail">
+                            <i class="fas fa-book"></i>
+                            <span>{{ exam.subject.name }}</span>
+                        </div>
+                        <div class="exam-card-detail">
+                            <i class="fas fa-users"></i>
+                            <span>{{ exam.group.name }}</span>
+                        </div>
+                        <div class="exam-card-detail">
+                            <i class="far fa-calendar-alt"></i>
+                            <span>{{ exam.date|date:"M d, Y" }}</span>
+                        </div>
+                        <div class="exam-card-detail">
+                            <i class="fas fa-chart-bar"></i>
+                            <span>Max Score: {{ exam.max_score }}</span>
+                        </div>
+                    </div>
+                    <div class="exam-card-actions">
+                        <div class="action-btn edit" data-id="{{ exam.id }}" title="Edit Exam">
+                            <i class="fas fa-edit"></i>
+                        </div>
+                        <div class="action-btn results" data-id="{{ exam.id }}" title="View Results">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                        <div class="action-btn delete" data-id="{{ exam.id }}" title="Delete Exam">
+                            <i class="fas fa-trash"></i>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="exam-card" style="text-align: center; padding: 40px;">
+                    <div style="color: #6B7280;">
+                        <i class="fas fa-inbox" style="font-size: 40px; margin-bottom: 10px;"></i>
+                        <p>No exams found</p>
+                        <p style="font-size: 14px; margin-top: 5px;">Try adjusting your filters or create a new exam.</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Exam Modal -->
+    <div class="modal" id="examModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalTitle">Add New Exam</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <form id="examForm" method="POST" action="{% url 'exams:teacher_create_exam' %}">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="form-label" for="examName">Exam Name</label>
+                        <input type="text" class="form-input" id="examName" name="name" required>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="examSubject">Subject</label>
+                            <select class="form-select" id="examSubject" name="subject" required>
+                                <option value="">Select Subject</option>
+                                {% for subject in subjects %}
+                                <option value="{{ subject.id }}">{{ subject.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="examGroup">Group</label>
+                            <select class="form-select" id="examGroup" name="group" required>
+                                <option value="">Select Group</option>
+                                {% for group in groups %}
+                                <option value="{{ group.id }}">{{ group.name }} - {{ group.subject.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="examDate">Exam Date & Time</label>
+                            <input type="datetime-local" class="form-input" id="examDate" name="date" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="maxScore">Max Score</label>
+                            <input type="number" class="form-input" id="maxScore" name="max_score" min="1" max="1000" value="100" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="cancelBtn">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="saveExamBtn">Save Exam</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Results Modal -->
+    <div class="modal" id="resultsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="resultsModalTitle">Exam Results</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="resultsExamInfo"></div>
+                <div class="results-table-container">
+                    <table class="results-table">
+                        <thead>
+                            <tr>
+                                <th>Student Name</th>
+                                <th>Score</th>
+                                <th>Percentage</th>
+                                <th>Remark</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="resultsTableBody">
+                            <!-- Results will be loaded dynamically via AJAX -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="closeResultsBtn">Close</button>
+                <button class="btn btn-success" id="saveResultsBtn">Save Results</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal" id="deleteModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Confirm Delete</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this exam? This will also delete all associated results.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelDeleteBtn">Cancel</button>
+                <form id="deleteForm" method="POST" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger" id="confirmDeleteBtn">Delete Exam</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Django template variables - use proper placeholders
+        const now = new Date();
+        const createExamUrl = "{% url 'exams:teacher_create_exam' %}";
+
+        // Get the base URLs without IDs
+        const editExamBaseUrl = "{% url 'exams:teacher_edit_exam' 0 %}";
+        const deleteExamBaseUrl = "{% url 'exams:teacher_delete_exam' 0 %}";
+        const examResultsBaseUrl = "{% url 'exams:teacher_exam_results' 0 %}";
+
+        // Extract the base path by removing the '0' placeholder
+        const editExamUrl = editExamBaseUrl.replace('/0/', '/');
+        const deleteExamUrl = deleteExamBaseUrl.replace('/0/', '/');
+        const examResultsUrl = examResultsBaseUrl.replace('/0/', '/');
+
+        console.log('Edit URL base:', editExamUrl);
+        console.log('Delete URL base:', deleteExamUrl);
+        console.log('Results URL base:', examResultsUrl);
+
+        // DOM Elements
+        const examTableBody = document.getElementById('examTableBody');
+        const examCards = document.getElementById('examCards');
+        const examModal = document.getElementById('examModal');
+        const resultsModal = document.getElementById('resultsModal');
+        const deleteModal = document.getElementById('deleteModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const resultsModalTitle = document.getElementById('resultsModalTitle');
+        const examForm = document.getElementById('examForm');
+        const deleteForm = document.getElementById('deleteForm');
+        const addExamBtn = document.getElementById('addExamBtn');
+        const saveExamBtn = document.getElementById('saveExamBtn');
+        const cancelBtn = document.getElementById('cancelBtn');
+        const closeResultsBtn = document.getElementById('closeResultsBtn');
+        const saveResultsBtn = document.getElementById('saveResultsBtn');
+        const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+        const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+        const closeModalBtns = document.querySelectorAll('.close-modal');
+        const subjectFilter = document.getElementById('subjectFilter');
+        const groupFilter = document.getElementById('groupFilter');
+        const searchInput = document.querySelector('.search-input');
+        const tabs = document.querySelectorAll('.tab');
+        const resultsExamInfo = document.getElementById('resultsExamInfo');
+        const resultsTableBody = document.getElementById('resultsTableBody');
+        const menuToggle = document.getElementById('menuToggle');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+        // Current exam being edited (null when adding new)
+        let currentExamId = null;
+        let currentResultsExamId = null;
+
+        // Format date for display
+        function formatDate(dateString) {
+            const options = { year: 'numeric', month: 'short', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString('en-US', options);
+        }
+
+        // Get badge class based on subject
+        function getSubjectBadgeClass(subject) {
+            const subjectMap = {
+                'Mathematics': 'badge-math',
+                'Science': 'badge-science',
+                'English': 'badge-english',
+                'History': 'badge-history'
+            };
+            return subjectMap[subject] || 'badge-math';
+        }
+
+        // Open modal for adding new exam
+        function openAddModal() {
+            modalTitle.textContent = 'Add New Exam';
+            examForm.reset();
+            examForm.action = createExamUrl;
+            currentExamId = null;
+            examModal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Open modal for editing exam - FIXED
+        function editExam(id) {
+            const url = editExamUrl + id + '/';
+            console.log('Navigating to edit URL:', url);
+            window.location.href = url;
+        }
+
+        // View and edit results for an exam - FIXED
+        function viewResults(id) {
+            const url = examResultsUrl + id + '/';
+            console.log('Navigating to results URL:', url);
+            window.location.href = url;
+        }
+
+        // Delete exam - FIXED
+        function deleteExam(id) {
+            if (confirm('Are you sure you want to delete this exam? This will also delete all associated results.')) {
+                const form = document.getElementById('deleteForm');
+                form.action = deleteExamUrl + id + '/';
+                console.log('Deleting exam with URL:', form.action);
+                form.submit();
+            }
+        }
+
+        // Close modal
+        function closeModal() {
+            examModal.style.display = 'none';
+            resultsModal.style.display = 'none';
+            deleteModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Switch tabs
+        function switchTab(tabName) {
+            document.getElementById('tabInput').value = tabName;
+            document.getElementById('filterForm').submit();
+        }
+
+        // Toggle sidebar on mobile
+        function toggleSidebar() {
+            sidebar.classList.toggle('active');
+            sidebarOverlay.classList.toggle('active');
+            document.body.style.overflow = sidebar.classList.contains('active') ? 'hidden' : 'auto';
+        }
+
+        // Close sidebar when clicking on overlay
+        function closeSidebar() {
+            sidebar.classList.remove('active');
+            sidebarOverlay.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Add event listeners to action buttons
+        function addActionButtonListeners() {
+            // Edit buttons
+            document.querySelectorAll('.action-btn.edit').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const id = parseInt(e.currentTarget.getAttribute('data-id'));
+                    console.log('Edit exam clicked, ID:', id);
+                    editExam(id);
+                });
+            });
+
+            // Results buttons
+            document.querySelectorAll('.action-btn.results').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const id = parseInt(e.currentTarget.getAttribute('data-id'));
+                    console.log('Results exam clicked, ID:', id);
+                    viewResults(id);
+                });
+            });
+
+            // Delete buttons
+            document.querySelectorAll('.action-btn.delete').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const id = parseInt(e.currentTarget.getAttribute('data-id'));
+                    console.log('Delete exam clicked, ID:', id);
+                    deleteExam(id);
+                });
+            });
+        }
+
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('DOM loaded, initializing event listeners...');
+
+            // Add active class to clicked menu items
+            const menuItems = document.querySelectorAll('.menu-item');
+            menuItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    menuItems.forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+
+                    // Close sidebar on mobile after clicking a menu item
+                    if (window.innerWidth <= 992) {
+                        closeSidebar();
+                    }
+
+                    // Navigate to the link
+                    const href = this.getAttribute('href');
+                    if (href && href !== '#') {
+                        window.location.href = href;
+                    }
+                });
+            });
+
+            // Modal events
+            addExamBtn.addEventListener('click', openAddModal);
+            cancelBtn.addEventListener('click', closeModal);
+            closeResultsBtn.addEventListener('click', closeModal);
+            cancelDeleteBtn.addEventListener('click', closeModal);
+
+            // Close modal when clicking outside or on close button
+            closeModalBtns.forEach(btn => {
+                btn.addEventListener('click', closeModal);
+            });
+
+            window.addEventListener('click', (e) => {
+                if (e.target === examModal || e.target === resultsModal || e.target === deleteModal) {
+                    closeModal();
+                }
+            });
+
+            // Filter events - auto-submit when changed
+            subjectFilter.addEventListener('change', function() {
+                document.getElementById('filterForm').submit();
+            });
+
+            groupFilter.addEventListener('change', function() {
+                document.getElementById('filterForm').submit();
+            });
+
+            searchInput.addEventListener('input', function() {
+                // Add slight delay for search
+                clearTimeout(this.searchTimeout);
+                this.searchTimeout = setTimeout(() => {
+                    document.getElementById('filterForm').submit();
+                }, 500);
+            });
+
+            // Tab events
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    switchTab(tab.getAttribute('data-tab'));
+                });
+            });
+
+            // Mobile sidebar events
+            menuToggle.addEventListener('click', toggleSidebar);
+            sidebarOverlay.addEventListener('click', closeSidebar);
+
+            // Close sidebar when window is resized to desktop size
+            window.addEventListener('resize', () => {
+                if (window.innerWidth > 992) {
+                    closeSidebar();
+                }
+            });
+
+            // Add event listeners to action buttons
+            addActionButtonListeners();
+
+            console.log('Event listeners initialized');
+        });
+
+        // MutationObserver to handle dynamically loaded content
+        const observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.addedNodes.length) {
+                    addActionButtonListeners();
+                }
+            });
+        });
+
+        // Start observing
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
+    </script>
+</body>
+</html>

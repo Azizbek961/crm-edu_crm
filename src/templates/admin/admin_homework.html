@@ -1,0 +1,1260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Samo Learning Center - Homework Management</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        :root {
+            --primary: #2563EB;
+            --primary-dark: #1D4ED8;
+            --secondary: #FF6B35;
+            --light: #F3F4F6;
+            --dark: #1F2937;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --sidebar-width: 260px;
+            --header-height: 70px;
+            --border-radius: 12px;
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            background-color: #F5F7FB;
+            color: var(--dark);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--dark);
+            color: white;
+            height: 100vh;
+            position: fixed;
+            transition: var(--transition);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-logo {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 10px;
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        .sidebar-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .sidebar-menu {
+            padding: 20px 0;
+        }
+
+        .menu-label {
+            padding: 10px 20px;
+            font-size: 12px;
+            text-transform: uppercase;
+            color: #9CA3AF;
+            letter-spacing: 1px;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 14px 20px;
+            color: #E5E7EB;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .menu-item:hover, .menu-item.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-left: 4px solid var(--primary);
+        }
+
+        .menu-item i {
+            margin-right: 12px;
+            font-size: 18px;
+            width: 24px;
+            text-align: center;
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            transition: var(--transition);
+        }
+
+        /* Header/Navbar Styles */
+        .header {
+            height: var(--header-height);
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 25px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .header-action {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--light);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-left: 15px;
+            cursor: pointer;
+            position: relative;
+            color: var(--dark);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--danger);
+            color: white;
+            font-size: 10px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            margin-left: 20px;
+            cursor: pointer;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: 600;
+            margin-right: 10px;
+        }
+
+        /* Homework Content Styles */
+        .homework-content {
+            padding: 25px;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: var(--border-radius);
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-secondary {
+            background: var(--light);
+            color: var(--dark);
+        }
+
+        .btn-secondary:hover {
+            background: #E5E7EB;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #0D9C6E;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #DC2626;
+        }
+
+        .card {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+
+        .card-header {
+            padding: 20px;
+            border-bottom: 1px solid #E5E7EB;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .search-filter {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .search-box {
+            flex: 1;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 15px 12px 40px;
+            border: 1px solid #E5E7EB;
+            border-radius: var(--border-radius);
+            font-size: 14px;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9CA3AF;
+        }
+
+        .filter-select {
+            padding: 12px 15px;
+            border: 1px solid #E5E7EB;
+            border-radius: var(--border-radius);
+            background: white;
+            font-size: 14px;
+            min-width: 150px;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        .homework-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .homework-table th {
+            background: #F9FAFB;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #6B7280;
+            border-bottom: 1px solid #E5E7EB;
+        }
+
+        .homework-table td {
+            padding: 15px;
+            border-bottom: 1px solid #E5E7EB;
+        }
+
+        .homework-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .homework-table tr:hover {
+            background: #F9FAFB;
+        }
+
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .status-assigned {
+            background: #EFF6FF;
+            color: var(--primary);
+        }
+
+        .status-completed {
+            background: #ECFDF5;
+            color: var(--success);
+        }
+
+        .status-overdue {
+            background: #FEF2F2;
+            color: var(--danger);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .edit-btn {
+            background: #EFF6FF;
+            color: var(--primary);
+        }
+
+        .edit-btn:hover {
+            background: #DBEAFE;
+        }
+
+        .delete-btn {
+            background: #FEF2F2;
+            color: var(--danger);
+        }
+
+        .delete-btn:hover {
+            background: #FECACA;
+        }
+
+        .view-btn {
+            background: #F0FDF4;
+            color: var(--success);
+        }
+
+        .view-btn:hover {
+            background: #DCFCE7;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .pagination-info {
+            color: #6B7280;
+            font-size: 14px;
+        }
+
+        .pagination-controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        .pagination-btn {
+            padding: 8px 12px;
+            border: 1px solid #E5E7EB;
+            border-radius: 6px;
+            background: white;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .pagination-btn:hover {
+            background: #F9FAFB;
+        }
+
+        .pagination-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: var(--border-radius);
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid #E5E7EB;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #6B7280;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #E5E7EB;
+            border-radius: var(--border-radius);
+            font-size: 14px;
+            transition: var(--transition);
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .form-textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .modal-footer {
+            padding: 20px;
+            border-top: 1px solid #E5E7EB;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 70px;
+                overflow: hidden;
+            }
+            
+            .sidebar-header, .menu-label, .menu-item span {
+                display: none;
+            }
+            
+            .menu-item {
+                justify-content: center;
+                padding: 18px;
+            }
+            
+            .menu-item i {
+                margin-right: 0;
+                font-size: 20px;
+            }
+            
+            .main-content {
+                margin-left: 70px;
+            }
+            
+            .sidebar:hover {
+                width: var(--sidebar-width);
+                z-index: 1001;
+            }
+            
+            .sidebar:hover .sidebar-header,
+            .sidebar:hover .menu-label,
+            .sidebar:hover .menu-item span {
+                display: flex;
+            }
+            
+            .sidebar:hover .menu-item {
+                justify-content: flex-start;
+                padding: 14px 20px;
+            }
+            
+            .sidebar:hover .menu-item i {
+                margin-right: 12px;
+                font-size: 18px;
+            }
+
+            .search-filter {
+                flex-direction: column;
+            }
+
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .header {
+                padding: 0 15px;
+            }
+            
+            .user-profile .user-name {
+                display: none;
+            }
+
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .pagination {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<!-- templates/admin/admin_homework.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Samo Learning Center - Homework Management</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <style>
+        /* Your existing CSS styles remain the same */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        :root {
+            --primary: #2563EB;
+            --primary-dark: #1D4ED8;
+            --secondary: #FF6B35;
+            --light: #F3F4F6;
+            --dark: #1F2937;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --sidebar-width: 260px;
+            --header-height: 70px;
+            --border-radius: 12px;
+            --transition: all 0.3s ease;
+        }
+
+        /* All your existing CSS styles remain exactly the same */
+        /* ... (keeping all the CSS styles from your original file) ... */
+
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">S</div>
+            <div class="sidebar-title">Samo CRM</div>
+        </div>
+
+        <div class="sidebar-menu">
+            <div class="menu-label">Main</div>
+            <a href="{% url 'admin_dashboard' %}" class="menu-item">
+                <i class="fas fa-home"></i>
+                <span>Dashboard</span>
+            </a>
+            <div class="menu-label">User</div>
+            <a href="{% url 'admin_users_management' %}" class="menu-item ">
+                <i class="fas fa-user-friends"></i>
+                <span>Users</span>
+            </a>
+            <a href="{% url 'teachers_list' %}" class="menu-item ">
+                <i class="fas fa-chalkboard-teacher"></i>
+                <span>Teachers</span>
+            </a>
+            <a href="{% url 'student_list' %}" class="menu-item">
+                <i class="fas fa-users"></i>
+                <span>Students</span>
+            </a>
+            <div class="menu-label">Group</div>
+            <a href="{% url 'groups_list' %}" class="menu-item ">
+                <i class="fas fa-layer-group"></i>
+                <span>Groups</span>
+            </a>
+            <a href="{% url 'attendance_list' %}" class="menu-item">
+                <i class="fas fa-clipboard-check"></i>
+                <span>Attendance</span>
+            </a>
+            <div class="menu-label">Exam</div>
+            <a href="{% url 'exams:admin_exam_management' %}" class="menu-item">
+                <i class="fas fa-file-alt"></i>
+                <span>Exams</span>
+            </a>
+            <a href="{% url 'exams:admin_exam_results' %}" class="menu-item">
+                <i class="fas fa-chart-line"></i>
+                <span>Performance</span>
+            </a>
+            <div class="menu-label">Payment</div>
+            <a href="{% url 'payments:admin_payments_dashboard' %}" class="menu-item">
+                <i class="fas fa-money-check"></i>
+                <span>Payments</span>
+            </a>
+            <div class="menu-label">Education</div>
+            <a href="{% url 'education:courses_dashboard' %}" class="menu-item">
+                <i class="fas fa-graduation-cap"></i>
+                <span>Courses</span>
+            </a>
+            <a href="{% url 'education:admin_homework' %}" class="menu-item active">
+                <i class="fas fa-tasks"></i>
+                <span>Assignments</span>
+            </a>
+
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header/Navbar -->
+        <header class="header">
+            <div class="header-left">
+                <!-- No burger icon as requested -->
+            </div>
+
+            <div class="header-right">
+                <div class="header-action">
+                    <i class="far fa-bell"></i>
+                    <span class="notification-badge">3</span>
+                </div>
+
+                <div class="user-profile">
+                    <div class="user-avatar">
+                        {% if user.get_full_name %}
+                            {{ user.get_full_name|slice:":2"|upper }}
+                        {% else %}
+                            {{ user.username|slice:":2"|upper }}
+                        {% endif %}
+                    </div>
+                    <div class="user-name">
+                        {% if user.get_full_name %}
+                            {{ user.get_full_name }}
+                        {% else %}
+                            {{ user.username }}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Homework Content -->
+        <div class="homework-content">
+            <div class="page-header">
+                <h1 class="page-title">Homework Management (Admin)</h1>
+                <button class="btn btn-primary" id="addHomeworkBtn">
+                    <i class="fas fa-plus"></i> Add New Homework
+                </button>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">All Homework Assignments</h2>
+                </div>
+                <div class="card-body">
+                    <!-- Search and Filter Form -->
+                    <form method="GET" action="{% url 'education:admin_homework' %}" class="search-filter">
+                        <div class="search-box">
+                            <i class="fas fa-search search-icon"></i>
+                            <input type="text" class="search-input" name="search" placeholder="Search homework..." value="{{ search_query }}">
+                        </div>
+                        <select class="filter-select" name="subject">
+                            <option value="">All Subjects</option>
+                            {% for subject in all_subjects %}
+                                <option value="{{ subject.id }}" {% if subject_filter == subject.id|stringformat:"i" %}selected{% endif %}>
+                                    {{ subject.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                        <select class="filter-select" name="status">
+                            <option value="">All Status</option>
+                            <option value="active" {% if status_filter == "active" %}selected{% endif %}>Active</option>
+                            <option value="completed" {% if status_filter == "completed" %}selected{% endif %}>Completed</option>
+                            <option value="upcoming" {% if status_filter == "upcoming" %}selected{% endif %}>Upcoming</option>
+                        </select>
+                        <button type="submit" class="btn btn-primary" style="padding: 10px 15px;">
+                            <i class="fas fa-filter"></i> Apply
+                        </button>
+                    </form>
+
+                    <div class="table-container">
+                        <table class="homework-table">
+                            <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Subject</th>
+                                    <th>Assigned To</th>
+                                    <th>Assigned By</th>
+                                    <th>Due Date</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for homework in homework_list %}
+                                <tr>
+                                    <td>{{ homework.title }}</td>
+                                    <td>{{ homework.subject.name }}</td>
+                                    <td>{{ homework.assigned_to.name }}</td>
+                                    <td>{{ homework.assigned_by.user.get_full_name|default:homework.assigned_by.user.username }}</td>
+                                    <td>{{ homework.due_date|date:"Y-m-d H:i" }}</td>
+                                    <td>
+                                        {% if homework.due_date < now %}
+                                            <span class="status-badge status-overdue">Overdue</span>
+                                        {% else %}
+                                            <span class="status-badge status-assigned">Active</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <div class="action-btn view-btn" title="View Details" data-homework-id="{{ homework.id }}">
+                                                <i class="fas fa-eye"></i>
+                                            </div>
+                                            <div class="action-btn edit-btn" title="Edit" data-homework-id="{{ homework.id }}">
+                                                <i class="fas fa-edit"></i>
+                                            </div>
+                                            <div class="action-btn delete-btn" title="Delete" data-homework-id="{{ homework.id }}">
+                                                <i class="fas fa-trash"></i>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="7" style="text-align: center; padding: 30px;">
+                                        No homework assignments found.
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="pagination">
+                        <div class="pagination-info">
+                            Showing {{ homework_list.count }} assignment{{ homework_list.count|pluralize }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Homework Modal -->
+    <div class="modal" id="homeworkModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalTitle">Add New Homework</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="homeworkForm">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label class="form-label" for="homeworkTitle">Homework Title *</label>
+                        <input type="text" class="form-input" id="homeworkTitle" placeholder="Enter homework title" required>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="homeworkSubject">Subject *</label>
+                            <select class="form-select" id="homeworkSubject" required>
+                                <option value="">Select Subject</option>
+                                {% for subject in all_subjects %}
+                                    <option value="{{ subject.id }}">{{ subject.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="assignedTo">Assigned To *</label>
+                            <select class="form-select" id="assignedTo" required>
+                                <option value="">Select Group</option>
+                                {% for group in all_groups %}
+                                    <option value="{{ group.id }}">{{ group.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="assignedBy">Assigned By *</label>
+                            <select class="form-select" id="assignedBy" required>
+                                <option value="">Select Teacher</option>
+                                {% for teacher in all_teachers %}
+                                    <option value="{{ teacher.id }}">
+                                        {{ teacher.user.get_full_name|default:teacher.user.username }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="dueDate">Due Date *</label>
+                            <input type="datetime-local" class="form-input" id="dueDate" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="homeworkDescription">Description</label>
+                        <textarea class="form-textarea" id="homeworkDescription" placeholder="Enter homework description"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelBtn">Cancel</button>
+                <button class="btn btn-primary" id="saveHomeworkBtn">Save Homework</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- View Homework Modal -->
+    <div class="modal" id="viewHomeworkModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Homework Details</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Title</label>
+                    <p class="form-input" style="background: #F9FAFB;" id="viewTitle"></p>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Subject</label>
+                        <p class="form-input" style="background: #F9FAFB;" id="viewSubject"></p>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Assigned To</label>
+                        <p class="form-input" style="background: #F9FAFB;" id="viewAssignedTo"></p>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Assigned By</label>
+                        <p class="form-input" style="background: #F9FAFB;" id="viewAssignedBy"></p>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Due Date</label>
+                        <p class="form-input" style="background: #F9FAFB;" id="viewDueDate"></p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Description</label>
+                    <p class="form-input" style="background: #F9FAFB; min-height: 100px;" id="viewDescription"></p>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Status</label>
+                    <p><span class="status-badge" id="viewStatus"></span></p>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Created At</label>
+                    <p class="form-input" style="background: #F9FAFB;" id="viewCreatedAt"></p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="closeViewBtn">Close</button>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add active class to clicked menu items
+            const menuItems = document.querySelectorAll('.menu-item');
+
+            menuItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    if (this.getAttribute('href') === '#') {
+                        e.preventDefault();
+                    }
+
+                    // Remove active class from all items
+                    menuItems.forEach(i => i.classList.remove('active'));
+
+                    // Add active class to clicked item
+                    this.classList.add('active');
+                });
+            });
+
+            // Modal functionality
+            const addHomeworkBtn = document.getElementById('addHomeworkBtn');
+            const homeworkModal = document.getElementById('homeworkModal');
+            const viewHomeworkModal = document.getElementById('viewHomeworkModal');
+            const closeModalBtns = document.querySelectorAll('.close-modal');
+            const cancelBtn = document.getElementById('cancelBtn');
+            const closeViewBtn = document.getElementById('closeViewBtn');
+            const saveHomeworkBtn = document.getElementById('saveHomeworkBtn');
+            const viewBtns = document.querySelectorAll('.view-btn');
+            const editBtns = document.querySelectorAll('.edit-btn');
+            const deleteBtns = document.querySelectorAll('.delete-btn');
+
+            let currentHomeworkId = null;
+
+            // CSRF token setup for AJAX
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    const cookies = document.cookie.split(';');
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = cookies[i].trim();
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+
+            const csrftoken = getCookie('csrftoken');
+
+            // Open add homework modal
+            addHomeworkBtn.addEventListener('click', function() {
+                document.getElementById('modalTitle').textContent = 'Add New Homework';
+                document.getElementById('homeworkForm').reset();
+                currentHomeworkId = null;
+                homeworkModal.style.display = 'flex';
+            });
+
+            // Open view homework modal
+            viewBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const homeworkId = this.getAttribute('data-homework-id');
+
+                    // FIXED URL: Use /edu/ instead of /education/
+                    fetch(`/edu/admin/homework/${homeworkId}/edit/`)
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error(`HTTP error! status: ${response.status}`);
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            if (data.success) {
+                                const homework = data.homework;
+                                document.getElementById('viewTitle').textContent = homework.title || 'N/A';
+                                document.getElementById('viewSubject').textContent = homework.subject_name || 'N/A';
+                                document.getElementById('viewAssignedTo').textContent = homework.assigned_to_name || 'N/A';
+                                document.getElementById('viewAssignedBy').textContent = homework.assigned_by_name || 'N/A';
+                                document.getElementById('viewDueDate').textContent = homework.due_date ? new Date(homework.due_date).toLocaleString() : 'N/A';
+                                document.getElementById('viewDescription').textContent = homework.description || 'No description provided.';
+                                document.getElementById('viewCreatedAt').textContent = homework.created_at ? new Date(homework.created_at).toLocaleString() : 'N/A';
+
+                                // Determine status
+                                const dueDate = homework.due_date ? new Date(homework.due_date) : new Date();
+                                const now = new Date();
+                                let statusText, statusClass;
+                                if (dueDate < now) {
+                                    statusText = 'Overdue';
+                                    statusClass = 'status-overdue';
+                                } else {
+                                    statusText = 'Active';
+                                    statusClass = 'status-assigned';
+                                }
+
+                                document.getElementById('viewStatus').textContent = statusText;
+                                document.getElementById('viewStatus').className = `status-badge ${statusClass}`;
+
+                                viewHomeworkModal.style.display = 'flex';
+                            } else {
+                                alert('Error loading homework details: ' + (data.error || 'Unknown error'));
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert('Error loading homework details: ' + error.message);
+                        });
+                });
+            });
+
+            // Open edit homework modal
+            editBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const homeworkId = this.getAttribute('data-homework-id');
+                    currentHomeworkId = homeworkId;
+
+                    // FIXED URL: Use /edu/ instead of /education/
+                    fetch(`/edu/admin/homework/${homeworkId}/edit/`)
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error(`HTTP error! status: ${response.status}`);
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            if (data.success) {
+                                const homework = data.homework;
+                                document.getElementById('modalTitle').textContent = 'Edit Homework';
+                                document.getElementById('homeworkTitle').value = homework.title || '';
+                                document.getElementById('homeworkSubject').value = homework.subject_id || '';
+                                document.getElementById('assignedTo').value = homework.assigned_to_id || '';
+                                document.getElementById('assignedBy').value = homework.assigned_by_id || '';
+
+                                // Format date for datetime-local input
+                                if (homework.due_date) {
+                                    const dueDate = new Date(homework.due_date);
+                                    const formattedDate = dueDate.toISOString().slice(0, 16);
+                                    document.getElementById('dueDate').value = formattedDate;
+                                }
+
+                                document.getElementById('homeworkDescription').value = homework.description || '';
+
+                                homeworkModal.style.display = 'flex';
+                            } else {
+                                alert('Error loading homework data: ' + (data.error || 'Unknown error'));
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert('Error loading homework data: ' + error.message);
+                        });
+                });
+            });
+
+            // Delete homework
+            deleteBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const homeworkId = this.getAttribute('data-homework-id');
+
+                    if (confirm('Are you sure you want to delete this homework assignment?')) {
+                        // FIXED URL: Use /edu/ instead of /education/
+                        fetch(`/edu/admin/homework/${homeworkId}/delete/`, {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRFToken': csrftoken,
+                                'Content-Type': 'application/x-www-form-urlencoded',
+                            },
+                        })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error(`HTTP error! status: ${response.status}`);
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            if (data.success) {
+                                // Remove the row from the table
+                                const row = this.closest('tr');
+                                row.style.opacity = '0.5';
+                                setTimeout(() => {
+                                    row.remove();
+                                    // Show success message
+                                    alert('Homework deleted successfully!');
+                                }, 300);
+                            } else {
+                                alert('Error deleting homework: ' + (data.error || 'Unknown error'));
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert('Error deleting homework: ' + error.message);
+                        });
+                    }
+                });
+            });
+
+            // Close modals
+            function closeModals() {
+                homeworkModal.style.display = 'none';
+                viewHomeworkModal.style.display = 'none';
+                currentHomeworkId = null;
+            }
+
+            closeModalBtns.forEach(btn => {
+                btn.addEventListener('click', closeModals);
+            });
+
+            cancelBtn.addEventListener('click', closeModals);
+            closeViewBtn.addEventListener('click', closeModals);
+
+            // Save homework
+            saveHomeworkBtn.addEventListener('click', function() {
+                const formData = new FormData();
+                formData.append('title', document.getElementById('homeworkTitle').value);
+                formData.append('subject', document.getElementById('homeworkSubject').value);
+                formData.append('assigned_to', document.getElementById('assignedTo').value);
+                formData.append('assigned_by', document.getElementById('assignedBy').value);
+                formData.append('due_date', document.getElementById('dueDate').value);
+                formData.append('description', document.getElementById('homeworkDescription').value);
+
+                // FIXED URLS: Use /edu/ instead of /education/
+                const url = currentHomeworkId
+                    ? `/edu/admin/homework/${currentHomeworkId}/edit/`
+                    : '/edu/admin/homework/add/';
+
+                fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': csrftoken,
+                    },
+                    body: new URLSearchParams(formData)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        alert(data.message || 'Homework saved successfully!');
+                        closeModals();
+                        location.reload(); // Reload to show updated list
+                    } else {
+                        alert('Error: ' + (data.error || 'Unknown error'));
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error saving homework: ' + error.message);
+                });
+            });
+
+            // Close modal when clicking outside
+            window.addEventListener('click', function(e) {
+                if (e.target === homeworkModal || e.target === viewHomeworkModal) {
+                    closeModals();
+                }
+            });
+
+            // Client-side search functionality
+            const searchInput = document.querySelector('.search-input');
+            if (searchInput) {
+                searchInput.addEventListener('input', function() {
+                    const filter = this.value.toLowerCase();
+                    const rows = document.querySelectorAll('.homework-table tbody tr');
+
+                    rows.forEach(row => {
+                        const text = row.textContent.toLowerCase();
+                        row.style.display = text.includes(filter) ? '' : 'none';
+                    });
+                });
+            }
+        });
+    </script>
+</body>
+</html>
+</html>

@@ -1,0 +1,42 @@
+<div class="subject-detail">
+    <div class="detail-group">
+        <label class="detail-label">Subject Name:</label>
+        <span class="detail-value">{{ subject.name }}</span>
+    </div>
+    <div class="detail-group">
+        <label class="detail-label">Subject Code:</label>
+        <span class="detail-value">{{ subject.code }}</span>
+    </div>
+    <div class="detail-group">
+        <label class="detail-label">Description:</label>
+        <span class="detail-value">{{ subject.description|default:"No description provided" }}</span>
+    </div>
+</div>
+
+<style>
+.subject-detail {
+    padding: 10px;
+}
+
+.detail-group {
+    display: flex;
+    margin-bottom: 15px;
+    padding: 12px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid #2563EB;
+}
+
+.detail-label {
+    font-weight: 600;
+    color: #374151;
+    min-width: 140px;
+    display: inline-block;
+}
+
+.detail-value {
+    color: #1F2937;
+    flex: 1;
+    font-weight: 500;
+}
+</style>

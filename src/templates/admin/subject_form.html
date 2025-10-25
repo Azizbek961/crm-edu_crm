@@ -1,0 +1,17 @@
+<div class="form-group">
+    <label class="form-label" for="name">Subject Name *</label>
+    <input type="text" class="form-control" id="name" name="name"
+           value="{% if subject %}{{ subject.name }}{% endif %}" required>
+</div>
+
+<div class="form-group">
+    <label class="form-label" for="code">Subject Code *</label>
+    <input type="text" class="form-control" id="code" name="code"
+           value="{% if subject %}{{ subject.code }}{% endif %}" required>
+</div>
+
+<div class="form-group">
+    <label class="form-label" for="description">Description</label>
+    <textarea class="form-control" id="description" name="description"
+              rows="4">{% if subject %}{{ subject.description }}{% endif %}</textarea>
+</div>

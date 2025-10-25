@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Group Details - Samo Learning Center</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        :root {
+            --primary: #2563EB;
+            --primary-dark: #1D4ED8;
+            --secondary: #FF6B35;
+            --light: #F3F4F6;
+            --dark: #1F2937;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --sidebar-width: 260px;
+            --header-height: 70px;
+            --border-radius: 12px;
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            background-color: #F5F7FB;
+            color: var(--dark);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--dark);
+            color: white;
+            height: 100vh;
+            position: fixed;
+            transition: var(--transition);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-logo {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 10px;
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        .sidebar-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .sidebar-menu {
+            padding: 20px 0;
+        }
+
+        .menu-label {
+            padding: 10px 20px;
+            font-size: 12px;
+            text-transform: uppercase;
+            color: #9CA3AF;
+            letter-spacing: 1px;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 14px 20px;
+            color: #E5E7EB;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .menu-item:hover, .menu-item.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-left: 4px solid var(--primary);
+        }
+
+        .menu-item i {
+            margin-right: 12px;
+            font-size: 18px;
+            width: 24px;
+            text-align: center;
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            transition: var(--transition);
+        }
+
+        /* Header/Navbar Styles */
+        .header {
+            height: var(--header-height);
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 25px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .header-action {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--light);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-left: 15px;
+            cursor: pointer;
+            position: relative;
+            color: var(--dark);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--danger);
+            color: white;
+            font-size: 10px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            margin-left: 20px;
+            cursor: pointer;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: 600;
+            margin-right: 10px;
+        }
+
+        /* Group Detail Content Styles */
+        .group-detail {
+            padding: 25px;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 8px;
+            background: rgba(37, 99, 235, 0.1);
+            transition: var(--transition);
+        }
+
+        .back-btn:hover {
+            background: rgba(37, 99, 235, 0.2);
+        }
+
+        .group-info-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 25px;
+        }
+
+        .group-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .group-title {
+            font-size: 22px;
+            font-weight: 600;
+        }
+
+        .group-status {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .status-active {
+            background: #D1FAE5;
+            color: #065F46;
+        }
+
+        .status-inactive {
+            background: #FEF3C7;
+            color: #92400E;
+        }
+
+        .group-details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px;
+            background: #F9FAFB;
+            border-radius: 8px;
+        }
+
+        .detail-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background: rgba(37, 99, 235, 0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--primary);
+            font-size: 18px;
+        }
+
+        .detail-info h4 {
+            font-size: 14px;
+            color: #6B7280;
+            margin-bottom: 4px;
+        }
+
+        .detail-info p {
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #E5E7EB;
+        }
+
+        /* Students Table */
+        .students-section {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 25px;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        .students-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .students-table th {
+            background: #F9FAFB;
+            padding: 12px 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #374151;
+            border-bottom: 1px solid #E5E7EB;
+        }
+
+        .students-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #F3F4F6;
+        }
+
+        .students-table tr:hover {
+            background: #F9FAFB;
+        }
+
+        .attendance-badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .present {
+            background: #D1FAE5;
+            color: #065F46;
+        }
+
+        .absent {
+            background: #FEE2E2;
+            color: #991B1B;
+        }
+
+        .late {
+            background: #FEF3C7;
+            color: #92400E;
+        }
+
+        /* Attendance Stats */
+        .attendance-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #6B7280;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 25px;
+        }
+
+        .btn {
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--dark);
+            border: 1px solid #E5E7EB;
+        }
+
+        .btn-secondary:hover {
+            background: #F9FAFB;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #059669;
+        }
+
+        .btn-warning {
+            background: var(--warning);
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background: #D97706;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 70px;
+                overflow: hidden;
+            }
+            
+            .sidebar-header, .menu-label, .menu-item span {
+                display: none;
+            }
+            
+            .menu-item {
+                justify-content: center;
+                padding: 18px;
+            }
+            
+            .menu-item i {
+                margin-right: 0;
+                font-size: 20px;
+            }
+            
+            .main-content {
+                margin-left: 70px;
+            }
+            
+            .sidebar:hover {
+                width: var(--sidebar-width);
+                z-index: 1001;
+            }
+            
+            .sidebar:hover .sidebar-header,
+            .sidebar:hover .menu-label,
+            .sidebar:hover .menu-item span {
+                display: flex;
+            }
+            
+            .sidebar:hover .menu-item {
+                justify-content: flex-start;
+                padding: 14px 20px;
+            }
+            
+            .sidebar:hover .menu-item i {
+                margin-right: 12px;
+                font-size: 18px;
+            }
+            
+            .group-details-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .attendance-stats {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .header {
+                padding: 0 15px;
+            }
+            
+            .user-profile .user-name {
+                display: none;
+            }
+            
+            .group-detail {
+                padding: 15px;
+            }
+            
+            .attendance-stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+
+
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header/Navbar -->
+        <header class="header">
+            <div class="header-left">
+                <!-- No burger icon as requested -->
+            </div>
+            
+            <div class="header-right">
+                <div class="header-action">
+                    <i class="far fa-bell"></i>
+                    <span class="notification-badge">3</span>
+                </div>
+                
+                <div class="user-profile">
+                    <div class="user-avatar">AJ</div>
+                    <div class="user-name">Admin John</div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Group Detail Content -->
+        <div class="group-detail">
+            <div class="page-header">
+                <h1 class="page-title">Group Details</h1>
+                <a href="{% url 'groups_list' %}" class="back-btn">
+                    <i class="fas fa-arrow-left"></i> Back to Groups
+                </a>
+            </div>
+            
+            {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}" style="padding: 10px; margin-bottom: 15px; border-radius: 5px; 
+                    {% if message.tags == 'success' %}background: #D1FAE5; color: #065F46; border: 1px solid #A7F3D0;{% endif %}
+                    {% if message.tags == 'error' %}background: #FEE2E2; color: #991B1B; border: 1px solid #FCA5A5;{% endif %}">
+                    <i class="fas {% if message.tags == 'success' %}fa-check-circle{% else %}fa-exclamation-circle{% endif %}"></i>
+                    {{ message }}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            
+            {% if group %}
+            <!-- Group Information Card -->
+            <div class="group-info-card">
+                <div class="group-header">
+                    <h2 class="group-title">{{ group.name }}</h2>
+                    <span class="group-status status-active">Active</span>
+                </div>
+                
+                <div class="group-details-grid">
+                    <div class="detail-item">
+                        <div class="detail-icon">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <div class="detail-info">
+                            <h4>Subject</h4>
+                            <p>{{ group.subject.name }}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="detail-item">
+                        <div class="detail-icon">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                        </div>
+                        <div class="detail-info">
+                            <h4>Teacher</h4>
+                            <p>
+                                {% if group.teacher.user %}
+                                    {{ group.teacher.user.first_name }} {{ group.teacher.user.last_name }}
+                                {% else %}
+                                    {{ group.teacher.first_name }} {{ group.teacher.last_name }}
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="detail-item">
+                        <div class="detail-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="detail-info">
+                            <h4>Schedule</h4>
+                            <p>
+                                {% if group.schedule %}
+                                    {% if group.schedule.schedule %}
+                                        {{ group.schedule.schedule }}
+                                    {% else %}
+                                        {{ group.schedule }}
+                                    {% endif %}
+                                {% else %}
+                                    Schedule not set
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="detail-item">
+                        <div class="detail-icon">
+                            <i class="fas fa-user-friends"></i>
+                        </div>
+                        <div class="detail-info">
+                            <h4>Total Students</h4>
+                            <p>{{ students|length }} Students</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3 class="section-title">Group Description</h3>
+                <p>This group focuses on advanced topics in {{ group.subject.name }}. The curriculum is designed to challenge students and prepare them for higher-level studies.</p>
+            </div>
+            
+            <!-- Attendance Statistics -->
+            <div class="attendance-stats">
+                <div class="stat-card">
+                    <div class="stat-value">92%</div>
+                    <div class="stat-label">Overall Attendance</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-value">15</div>
+                    <div class="stat-label">Total Sessions</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-value">12</div>
+                    <div class="stat-label">Present Students (Avg)</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-value">3</div>
+                    <div class="stat-label">Absences (Total)</div>
+                </div>
+            </div>
+            
+            <!-- Students Section -->
+            <div class="students-section">
+                <h3 class="section-title">Students in this Group</h3>
+                
+                {% if students %}
+                <div class="table-container">
+                    <table class="students-table">
+                        <thead>
+                            <tr>
+                                <th>Student Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Attendance Rate</th>
+                                <th>Last Attendance</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for student in students %}
+                            <tr>
+                                <td>
+                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                        <div style="width: 36px; height: 36px; border-radius: 50%; background: #E5E7EB; display: flex; align-items: center; justify-content: center; font-weight: 600;">
+                                            {% if student.user %}
+                                                {{ student.user.first_name|first }}{{ student.user.last_name|first }}
+                                            {% else %}
+                                                {{ student.first_name|first }}{{ student.last_name|first }}
+                                            {% endif %}
+                                        </div>
+                                        <div>
+                                            {% if student.user %}
+                                                {{ student.user.first_name }} {{ student.user.last_name }}
+                                            {% else %}
+                                                {{ student.first_name }} {{ student.last_name }}
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    {% if student.user %}
+                                        {{ student.user.email }}
+                                    {% else %}
+                                        {{ student.email|default:"N/A" }}
+                                    {% endif %}
+                                </td>
+                                <td>{{ student.phone|default:"N/A" }}</td>
+                                <td>
+                                    <div style="display: flex; align-items: center; gap: 8px;">
+                                        <div style="width: 60px; height: 6px; background: #E5E7EB; border-radius: 3px; overflow: hidden;">
+                                            <div style="height: 100%; background: #10B981; width: 85%;"></div>
+                                        </div>
+                                        <span>85%</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="attendance-badge present">Present</span>
+                                </td>
+                                <td>
+                                    <div style="display: flex; gap: 5px;">
+                                        <button class="action-btn view" style="width: 32px; height: 32px; border-radius: 6px; display: flex; align-items: center; justify-content: center; cursor: pointer; border: none; background: rgba(37, 99, 235, 0.1); color: var(--primary);">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="action-btn edit" style="width: 32px; height: 32px; border-radius: 6px; display: flex; align-items: center; justify-content: center; cursor: pointer; border: none; background: rgba(245, 158, 11, 0.1); color: var(--warning);">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div style="text-align: center; padding: 40px;">
+                    <i class="fas fa-users" style="font-size: 48px; color: #6B7280; margin-bottom: 15px; opacity: 0.5;"></i>
+                    <h3 style="color: #6B7280; margin-bottom: 10px;">No students in this group</h3>
+                    <p style="color: #9CA3AF;">Add students to this group to start tracking attendance</p>
+                    <button class="btn btn-primary" style="margin-top: 20px;">
+                        <i class="fas fa-user-plus"></i> Add Students
+                    </button>
+                </div>
+                {% endif %}
+            </div>
+            
+            <!-- Attendance Records -->
+            <div class="students-section">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                    <h3 class="section-title" style="margin-bottom: 0;">Recent Attendance Records</h3>
+                    <button class="btn btn-primary">
+                        <i class="fas fa-calendar-plus"></i> Record Attendance
+                    </button>
+                </div>
+                
+                {% if attendance_records %}
+                <div class="table-container">
+                    <table class="students-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Student</th>
+                                <th>Status</th>
+                                <th>Recorded By</th>
+                                <th>Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for record in attendance_records|slice:":10" %}
+                            <tr>
+                                <td>{{ record.date }}</td>
+                                <td>
+                                    {% if record.student.user %}
+                                        {{ record.student.user.first_name }} {{ record.student.user.last_name }}
+                                    {% else %}
+                                        {{ record.student.first_name }} {{ record.student.last_name }}
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <span class="attendance-badge {% if record.status == 'present' %}present{% elif record.status == 'absent' %}absent{% else %}late{% endif %}">
+                                        {{ record.status|title }}
+                                    </span>
+                                </td>
+                                <td>
+                                    {% if record.recorded_by.user %}
+                                        {{ record.recorded_by.user.first_name }} {{ record.recorded_by.user.last_name }}
+                                    {% else %}
+                                        {{ record.recorded_by.first_name }} {{ record.recorded_by.last_name }}
+                                    {% endif %}
+                                </td>
+                                <td>-</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div style="text-align: center; padding: 30px;">
+                    <i class="fas fa-clipboard-list" style="font-size: 48px; color: #6B7280; margin-bottom: 15px; opacity: 0.5;"></i>
+                    <h3 style="color: #6B7280; margin-bottom: 10px;">No attendance records</h3>
+                    <p style="color: #9CA3AF;">Start recording attendance to track student participation</p>
+                </div>
+                {% endif %}
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button class="btn btn-primary">
+                    <i class="fas fa-edit"></i> Edit Group
+                </button>
+                <button class="btn btn-success">
+                    <i class="fas fa-calendar-plus"></i> Schedule Session
+                </button>
+                <button class="btn btn-warning">
+                    <i class="fas fa-envelope"></i> Send Message
+                </button>
+                <button class="btn btn-secondary">
+                    <i class="fas fa-print"></i> Print Report
+                </button>
+            </div>
+            
+            {% else %}
+            <!-- Group not found message -->
+            <div style="text-align: center; padding: 60px 20px;">
+                <i class="fas fa-exclamation-triangle" style="font-size: 64px; color: #F59E0B; margin-bottom: 20px;"></i>
+                <h2 style="color: #6B7280; margin-bottom: 10px;">Group Not Found</h2>
+                <p style="color: #9CA3AF; margin-bottom: 30px;">The group you're looking for doesn't exist or may have been deleted.</p>
+                <a href="{% url 'groups_list' %}" class="btn btn-primary">
+                    <i class="fas fa-arrow-left"></i> Back to Groups List
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add active class to clicked menu items
+            const menuItems = document.querySelectorAll('.menu-item');
+            
+            menuItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Remove active class from all items
+                    menuItems.forEach(i => i.classList.remove('active'));
+                    
+                    // Add active class to clicked item
+                    this.classList.add('active');
+                });
+            });
+            
+            // Simple animation for stats
+            setTimeout(() => {
+                const statValues = document.querySelectorAll('.stat-value');
+                statValues.forEach(stat => {
+                    const originalText = stat.textContent;
+                    
+                    if (originalText.includes('%')) {
+                        const value = parseInt(originalText.replace('%', ''));
+                        animateValue(stat, 0, value, 1000, '%');
+                    } else {
+                        const value = parseInt(originalText);
+                        animateValue(stat, 0, value, 1000);
+                    }
+                });
+            }, 500);
+            
+            function animateValue(element, start, end, duration, suffix = '') {
+                let startTimestamp = null;
+                const step = (timestamp) => {
+                    if (!startTimestamp) startTimestamp = timestamp;
+                    const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                    const value = Math.floor(progress * (end - start) + start);
+                    element.textContent = value.toLocaleString() + suffix;
+                    if (progress < 1) {
+                        window.requestAnimationFrame(step);
+                    }
+                };
+                window.requestAnimationFrame(step);
+            }
+        });
+    </script>
+</body>
+</html>

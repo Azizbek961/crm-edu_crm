@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Samo Learning Center - Homework</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        :root {
+            --primary: #2563EB;
+            --primary-dark: #1D4ED8;
+            --primary-light: #DBEAFE;
+            --secondary: #FF6B35;
+            --light: #F3F4F6;
+            --dark: #1F2937;
+            --success: #10B981;
+            --success-light: #D1FAE5;
+            --warning: #F59E0B;
+            --warning-light: #FEF3C7;
+            --danger: #EF4444;
+            --danger-light: #FEE2E2;
+            --sidebar-width: 260px;
+            --header-height: 70px;
+            --border-radius: 12px;
+            --border-radius-sm: 8px;
+            --transition: all 0.3s ease;
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            background-color: #F5F7FB;
+            color: var(--dark);
+            display: flex;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--dark);
+            color: white;
+            height: 100vh;
+            position: fixed;
+            transition: var(--transition);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-logo {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 10px;
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        .sidebar-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .sidebar-menu {
+            padding: 20px 0;
+        }
+
+        .menu-label {
+            padding: 10px 20px;
+            font-size: 12px;
+            text-transform: uppercase;
+            color: #9CA3AF;
+            letter-spacing: 1px;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 14px 20px;
+            color: #E5E7EB;
+            text-decoration: none;
+            transition: var(--transition);
+            border-left: 4px solid transparent;
+        }
+
+        .menu-item:hover, .menu-item.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-left-color: var(--primary);
+        }
+
+        .menu-item i {
+            margin-right: 12px;
+            font-size: 18px;
+            width: 24px;
+            text-align: center;
+        }
+
+        /* Mobile Menu Toggle */
+        .mobile-menu-toggle {
+            display: none;
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            z-index: 1100;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            transition: var(--transition);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header/Navbar Styles */
+        .header {
+            height: var(--header-height);
+            background: white;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 25px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .header-action {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--light);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-left: 15px;
+            cursor: pointer;
+            position: relative;
+            color: var(--dark);
+            transition: var(--transition);
+        }
+
+        .header-action:hover {
+            background: var(--primary-light);
+            color: var(--primary);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--danger);
+            color: white;
+            font-size: 10px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            margin-left: 20px;
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+        }
+
+        .user-profile:hover {
+            background: var(--light);
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: 600;
+            margin-right: 10px;
+        }
+
+        /* Homework Content Styles */
+        .homework-container {
+            padding: 25px;
+            flex: 1;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .filter-controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .filter-select {
+            padding: 10px 15px;
+            border-radius: var(--border-radius);
+            border: 1px solid #E5E7EB;
+            background: white;
+            color: var(--dark);
+            font-size: 14px;
+            outline: none;
+            cursor: pointer;
+            transition: var(--transition);
+            min-width: 150px;
+        }
+
+        .filter-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: var(--border-radius);
+            border: none;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #E5E7EB;
+            color: var(--dark);
+        }
+
+        .btn-outline:hover {
+            background: var(--light);
+        }
+
+        .homework-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+        }
+
+        .homework-card {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-md);
+            padding: 20px;
+            transition: var(--transition);
+            border-left: 4px solid var(--primary);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .homework-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .homework-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .homework-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 5px;
+        }
+
+        .homework-subject {
+            display: inline-block;
+            background: var(--light);
+            color: var(--primary);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .homework-due-date {
+            font-size: 14px;
+            color: #6B7280;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .homework-due-date.urgent {
+            color: var(--danger);
+        }
+
+        .homework-due-date.warning {
+            color: var(--warning);
+        }
+
+        .homework-description {
+            color: #6B7280;
+            margin-bottom: 15px;
+            line-height: 1.5;
+            flex: 1;
+        }
+
+        .homework-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #F3F4F6;
+        }
+
+        .homework-assigned-by {
+            font-size: 14px;
+            color: #6B7280;
+        }
+
+        .homework-status {
+            font-size: 12px;
+            font-weight: 500;
+            padding: 5px 10px;
+            border-radius: 20px;
+        }
+
+        .status-pending {
+            background: var(--warning-light);
+            color: #D97706;
+        }
+
+        .status-completed {
+            background: var(--success-light);
+            color: #065F46;
+        }
+
+        .status-overdue {
+            background: var(--danger-light);
+            color: #DC2626;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            grid-column: 1 / -1;
+        }
+
+        .empty-state i {
+            font-size: 60px;
+            color: #D1D5DB;
+            margin-bottom: 15px;
+        }
+
+        .empty-state h3 {
+            font-size: 20px;
+            color: #6B7280;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .empty-state p {
+            color: #9CA3AF;
+            line-height: 1.6;
+        }
+
+        /* Homework Actions */
+        .homework-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .action-btn {
+            padding: 8px 12px;
+            border-radius: var(--border-radius-sm);
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .action-btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .action-btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .action-btn-outline {
+            background: transparent;
+            border: 1px solid #E5E7EB;
+            color: var(--dark);
+        }
+
+        .action-btn-outline:hover {
+            background: var(--light);
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            margin-top: 10px;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #6B7280;
+            margin-bottom: 5px;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: #E5E7EB;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary);
+            border-radius: 3px;
+            transition: width 0.5s ease;
+        }
+
+        /* Stats Cards */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-md);
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .stat-icon.pending {
+            background: var(--warning-light);
+            color: var(--warning);
+        }
+
+        .stat-icon.completed {
+            background: var(--success-light);
+            color: var(--success);
+        }
+
+        .stat-icon.overdue {
+            background: var(--danger-light);
+            color: var(--danger);
+        }
+
+        .stat-info h3 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .stat-info p {
+            font-size: 14px;
+            color: #6B7280;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 1024px) {
+            .homework-grid {
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .mobile-menu-toggle {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            
+            .sidebar {
+                transform: translateX(-100%);
+                width: 280px;
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+            }
+            
+            .homework-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .filter-controls {
+                width: 100%;
+            }
+            
+            .filter-select {
+                flex: 1;
+                min-width: 0;
+            }
+            
+            .header {
+                padding: 0 15px;
+            }
+            
+            .homework-container {
+                padding: 15px;
+            }
+            
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .user-profile .user-name {
+                display: none;
+            }
+            
+            .filter-controls {
+                flex-direction: column;
+            }
+            
+            .filter-select {
+                width: 100%;
+            }
+            
+            .homework-actions {
+                flex-direction: column;
+            }
+            
+            .action-btn {
+                justify-content: center;
+            }
+        }
+
+        /* Overlay for mobile menu */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+        
+        .overlay.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Mobile Menu Toggle -->
+    <button class="mobile-menu-toggle" id="mobileMenuToggle">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Overlay for mobile menu -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">S</div>
+            <div class="sidebar-title">Samo CRM</div>
+        </div>
+        
+        <div class="sidebar-menu">
+            <div class="menu-label">Main</div>
+            <a href="dashboard.html" class="menu-item">
+                <i class="fas fa-home"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="courses.html" class="menu-item">
+                <i class="fas fa-graduation-cap"></i>
+                <span>Courses</span>
+            </a>
+            <a href="homework.html" class="menu-item active">
+                <i class="fas fa-tasks"></i>
+                <span>Homework</span>
+            </a>
+            <a href="exams.html" class="menu-item">
+                <i class="fas fa-file-alt"></i>
+                <span>Exams</span>
+            </a>
+            
+            <div class="menu-label">Academic</div>
+            <a href="schedule.html" class="menu-item">
+                <i class="fas fa-calendar-alt"></i>
+                <span>Schedule</span>
+            </a>
+            <a href="attendance.html" class="menu-item">
+                <i class="fas fa-user-check"></i>
+                <span>Attendance</span>
+            </a>
+            <a href="performance.html" class="menu-item">
+                <i class="fas fa-chart-line"></i>
+                <span>Performance</span>
+            </a>
+            
+            <div class="menu-label">Account</div>
+            <a href="payments.html" class="menu-item">
+                <i class="fas fa-money-check"></i>
+                <span>Payments</span>
+            </a>
+            <a href="profile.html" class="menu-item">
+                <i class="fas fa-user"></i>
+                <span>Profile</span>
+            </a>
+            <a href="settings.html" class="menu-item">
+                <i class="fas fa-cog"></i>
+                <span>Settings</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header/Navbar -->
+        <header class="header">
+            <div class="header-left">
+                <!-- No burger icon as requested -->
+            </div>
+            
+            <div class="header-right">
+                <div class="header-action">
+                    <i class="far fa-bell"></i>
+                    <span class="notification-badge">3</span>
+                </div>
+                
+                <div class="user-profile">
+                    <div class="user-avatar">SJ</div>
+                    <div class="user-name">Student John</div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Homework Content -->
+        <div class="homework-container">
+            <div class="page-header">
+                <h1 class="page-title">My Homework</h1>
+                <div class="header-actions">
+                    <button class="btn btn-primary" id="viewAllBtn">
+                        <i class="fas fa-sync-alt"></i> View All
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="stat-icon pending">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="pendingCount">0</h3>
+                        <p>Pending Assignments</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon completed">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="completedCount">0</h3>
+                        <p>Completed</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon overdue">
+                        <i class="fas fa-exclamation-circle"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="overdueCount">0</h3>
+                        <p>Overdue</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="filter-controls">
+                <select class="filter-select" id="subjectFilter">
+                    <option value="all">All Subjects</option>
+                    <!-- Subjects will be populated dynamically by JavaScript -->
+                </select>
+
+                <select class="filter-select" id="statusFilter">
+                    <option value="all">All Status</option>
+                    <option value="pending">Pending</option>
+                    <option value="completed">Completed</option>
+                    <option value="overdue">Overdue</option>
+                </select>
+
+                <select class="filter-select" id="sortFilter">
+                    <option value="due_date">Sort by Due Date</option>
+                    <option value="subject">Sort by Subject</option>
+                    <option value="created_at">Sort by Assigned Date</option>
+                </select>
+            </div>
+
+            <div class="homework-grid" id="homeworkGrid">
+                <!-- Homework cards will be dynamically generated here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM elements
+            const sidebar = document.getElementById('sidebar');
+            const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+            const overlay = document.getElementById('overlay');
+            const homeworkGrid = document.getElementById('homeworkGrid');
+            const subjectFilter = document.getElementById('subjectFilter');
+            const statusFilter = document.getElementById('statusFilter');
+            const sortFilter = document.getElementById('sortFilter');
+            const viewAllBtn = document.getElementById('viewAllBtn');
+            const pendingCount = document.getElementById('pendingCount');
+            const completedCount = document.getElementById('completedCount');
+            const overdueCount = document.getElementById('overdueCount');
+
+            // Mobile menu toggle
+            mobileMenuToggle.addEventListener('click', function() {
+                sidebar.classList.toggle('active');
+                overlay.classList.toggle('active');
+            });
+
+            overlay.addEventListener('click', function() {
+                sidebar.classList.remove('active');
+                overlay.classList.remove('active');
+            });
+
+            // Homework data from Django context
+            const homeworkData = [
+                {% for homework in homework_list %}
+                {
+                    id: {{ homework.id }},
+                    title: "{{ homework.title|escapejs }}",
+                    subject: "{{ homework.subject|escapejs }}",
+                    subject_id: {{ homework.subject_id }},  // Add subject ID for filtering
+                    assignedBy: "{{ homework.assigned_by|escapejs }}",
+                    dueDate: "{{ homework.due_date|date:'Y-m-d H:i:s' }}",
+                    description: "{{ homework.description|escapejs }}",
+                    status: "{{ homework.status }}",
+                    createdAt: "{{ homework.created_at|date:'Y-m-d' }}",
+                    progress: {{ homework.progress }}
+                }{% if not forloop.last %},{% endif %}
+                {% endfor %}
+            ];
+
+            // Function to populate subject filter dynamically
+            function populateSubjectFilter() {
+                // Get unique subjects from homework data
+                const subjects = {};
+                homeworkData.forEach(homework => {
+                    if (!subjects[homework.subject_id]) {
+                        subjects[homework.subject_id] = homework.subject;
+                    }
+                });
+
+                // Clear existing options except "All Subjects"
+                while (subjectFilter.options.length > 1) {
+                    subjectFilter.remove(1);
+                }
+
+                // Add subject options
+                Object.entries(subjects).forEach(([id, name]) => {
+                    const option = document.createElement('option');
+                    option.value = id;
+                    option.textContent = name;
+                    subjectFilter.appendChild(option);
+                });
+            }
+
+            // Function to format date
+            function formatDate(dateString) {
+                const options = { year: 'numeric', month: 'short', day: 'numeric' };
+                return new Date(dateString).toLocaleDateString(undefined, options);
+            }
+
+            // Function to determine due date urgency
+            function getDueDateClass(dueDate) {
+                const today = new Date();
+                const due = new Date(dueDate);
+                const diffTime = due.getTime() - today.getTime();
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+                if (diffDays < 0) return 'urgent'; // Overdue
+                if (diffDays <= 2) return 'warning'; // Due soon
+                return ''; // Not urgent
+            }
+
+            // Function to update stats counters
+            function updateStats(homeworkList) {
+                const pending = homeworkList.filter(h => h.status === 'pending').length;
+                const completed = homeworkList.filter(h => h.status === 'completed').length;
+                const overdue = homeworkList.filter(h => h.status === 'overdue').length;
+
+                pendingCount.textContent = pending;
+                completedCount.textContent = completed;
+                overdueCount.textContent = overdue;
+            }
+
+            // Function to render homework cards
+            function renderHomeworkCards(homeworkList) {
+                homeworkGrid.innerHTML = '';
+
+                if (homeworkList.length === 0) {
+                    homeworkGrid.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-tasks"></i>
+                            <h3>No Homework Found</h3>
+                            <p>There are no homework assignments matching your current filters.</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                homeworkList.forEach(homework => {
+                    const dueDateClass = getDueDateClass(homework.dueDate);
+                    const statusClass = `status-${homework.status}`;
+
+                    const homeworkCard = document.createElement('div');
+                    homeworkCard.className = 'homework-card';
+                    homeworkCard.innerHTML = `
+                        <div class="homework-header">
+                            <div>
+                                <h3 class="homework-title">${homework.title}</h3>
+                                <span class="homework-subject">${homework.subject}</span>
+                            </div>
+                            <div class="homework-due-date ${dueDateClass}">
+                                <i class="far fa-calendar-alt"></i>
+                                ${formatDate(homework.dueDate)}
+                            </div>
+                        </div>
+                        <p class="homework-description">${homework.description}</p>
+                        ${homework.progress < 100 ? `
+
+                        ` : ''}
+                        <div class="homework-meta">
+                            <div class="homework-assigned-by">Assigned by: ${homework.assignedBy}</div>
+                        </div>
+                    `;
+
+                    homeworkGrid.appendChild(homeworkCard);
+                });
+            }
+
+            // Function to filter and sort homework
+            function filterAndSortHomework() {
+                const subjectValue = subjectFilter.value;
+                const statusValue = statusFilter.value;
+                const sortValue = sortFilter.value;
+
+                let filteredHomework = homeworkData;
+
+                // Filter by subject
+                if (subjectValue !== 'all') {
+                    filteredHomework = filteredHomework.filter(homework =>
+                        homework.subject_id == subjectValue  // Compare by subject ID
+                    );
+                }
+
+                // Filter by status
+                if (statusValue !== 'all') {
+                    filteredHomework = filteredHomework.filter(homework =>
+                        homework.status === statusValue
+                    );
+                }
+
+                // Sort homework
+                if (sortValue === 'due_date') {
+                    filteredHomework.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+                } else if (sortValue === 'subject') {
+                    filteredHomework.sort((a, b) => a.subject.localeCompare(b.subject));
+                } else if (sortValue === 'created_at') {
+                    filteredHomework.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+                }
+
+                updateStats(filteredHomework);
+                renderHomeworkCards(filteredHomework);
+            }
+
+            // Event listeners for filters
+            subjectFilter.addEventListener('change', filterAndSortHomework);
+            statusFilter.addEventListener('change', filterAndSortHomework);
+            sortFilter.addEventListener('change', filterAndSortHomework);
+
+            // View all button
+            viewAllBtn.addEventListener('click', function() {
+                subjectFilter.value = 'all';
+                statusFilter.value = 'all';
+                sortFilter.value = 'due_date';
+                filterAndSortHomework();
+            });
+
+            // Initialize
+            populateSubjectFilter();  // Populate subject filter dynamically
+            updateStats(homeworkData);
+            renderHomeworkCards(homeworkData);
+
+            // Add active class to clicked menu items
+            const menuItems = document.querySelectorAll('.menu-item');
+
+            menuItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+
+                    // Remove active class from all items
+                    menuItems.forEach(i => i.classList.remove('active'));
+
+                    // Add active class to clicked item
+                    this.classList.add('active');
+
+                    // Close mobile menu after clicking
+                    if (window.innerWidth <= 768) {
+                        sidebar.classList.remove('active');
+                        overlay.classList.remove('active');
+                    }
+                });
+            });
+        });
+
+        // Function to view homework details
+        function viewHomeworkDetails(homeworkId) {
+            // Implement homework details view
+            alert('View homework details for ID: ' + homeworkId);
+            // You can redirect to a detail page or show a modal
+            // window.location.href = `/courses/homework/${homeworkId}/`;
+        }
+
+        // Function to mark homework as done
+        function markAsDone(homeworkId) {
+            if (confirm('Mark this homework as completed?')) {
+                // Implement AJAX call to mark as done
+                fetch(`/courses/homework/${homeworkId}/mark-done/`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken'),
+                        'Content-Type': 'application/json',
+                    },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        location.reload();
+                    } else {
+                        alert('Error marking homework as done');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error marking homework as done');
+                });
+            }
+        }
+
+        // Function to get CSRF token
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+    </script>
+</body>
+</html>

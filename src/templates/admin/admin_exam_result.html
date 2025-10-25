@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam Results - Samo Learning Center</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        :root {
+            --primary: #2563EB;
+            --primary-dark: #1D4ED8;
+            --secondary: #FF6B35;
+            --light: #F3F4F6;
+            --dark: #1F2937;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --sidebar-width: 260px;
+            --header-height: 70px;
+            --border-radius: 12px;
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            background-color: #F5F7FB;
+            color: var(--dark);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--dark);
+            color: white;
+            height: 100vh;
+            position: fixed;
+            transition: var(--transition);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-logo {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 10px;
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        .sidebar-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .sidebar-menu {
+            padding: 20px 0;
+        }
+
+        .menu-label {
+            padding: 10px 20px;
+            font-size: 12px;
+            text-transform: uppercase;
+            color: #9CA3AF;
+            letter-spacing: 1px;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 14px 20px;
+            color: #E5E7EB;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .menu-item:hover, .menu-item.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-left: 4px solid var(--primary);
+        }
+
+        .menu-item i {
+            margin-right: 12px;
+            font-size: 18px;
+            width: 24px;
+            text-align: center;
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            transition: var(--transition);
+        }
+
+        /* Header/Navbar Styles */
+        .header {
+            height: var(--header-height);
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 25px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .header-action {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--light);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-left: 15px;
+            cursor: pointer;
+            position: relative;
+            color: var(--dark);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--danger);
+            color: white;
+            font-size: 10px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            margin-left: 20px;
+            cursor: pointer;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: 600;
+            margin-right: 10px;
+        }
+
+        /* Dashboard Content Styles */
+        .dashboard {
+            padding: 25px;
+            min-height: calc(100vh - var(--header-height));
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .page-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: var(--border-radius);
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-secondary {
+            background: var(--light);
+            color: var(--dark);
+        }
+
+        .btn-secondary:hover {
+            background: #E5E7EB;
+        }
+
+        .filters {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .filter-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .filter-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        .filter-select, .filter-input {
+            width: 100%;
+            padding: 10px 15px;
+            border-radius: var(--border-radius);
+            border: 1px solid #D1D5DB;
+            background: white;
+            font-size: 14px;
+        }
+
+        .filter-select:focus, .filter-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .results-container {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+
+        .results-header {
+            padding: 20px;
+            border-bottom: 1px solid #E5E7EB;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .results-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .results-count {
+            color: #6B7280;
+            font-size: 14px;
+        }
+
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .results-table th {
+            background: #F9FAFB;
+            padding: 15px 20px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--dark);
+            border-bottom: 1px solid #E5E7EB;
+        }
+
+        .results-table td {
+            padding: 15px 20px;
+            border-bottom: 1px solid #E5E7EB;
+        }
+
+        .results-table tr:hover {
+            background: #F9FAFB;
+        }
+
+        .student-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .student-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .student-name {
+            font-weight: 500;
+        }
+
+        .score-cell {
+            font-weight: 600;
+        }
+
+        .score-excellent {
+            color: var(--success);
+        }
+
+        .score-good {
+            color: var(--warning);
+        }
+
+        .score-poor {
+            color: var(--danger);
+        }
+
+        .remark-cell {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .remark-excellent {
+            background: #D1FAE5;
+            color: #065F46;
+        }
+
+        .remark-good {
+            background: #FEF3C7;
+            color: #92400E;
+        }
+
+        .remark-average {
+            background: #DBEAFE;
+            color: #1E40AF;
+        }
+
+        .remark-poor {
+            background: #FEE2E2;
+            color: #991B1B;
+        }
+
+        .action-cell {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: var(--transition);
+            color: #6B7280;
+        }
+
+        .action-btn:hover {
+            background: var(--light);
+            color: var(--dark);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .empty-state i {
+            font-size: 60px;
+            color: #D1D5DB;
+            margin-bottom: 15px;
+        }
+
+        .empty-state h3 {
+            font-size: 18px;
+            color: #6B7280;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .empty-state p {
+            color: #9CA3AF;
+            line-height: 1.6;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 70px;
+                overflow: hidden;
+            }
+            
+            .sidebar-header, .menu-label, .menu-item span {
+                display: none;
+            }
+            
+            .menu-item {
+                justify-content: center;
+                padding: 18px;
+            }
+            
+            .menu-item i {
+                margin-right: 0;
+                font-size: 20px;
+            }
+            
+            .main-content {
+                margin-left: 70px;
+            }
+            
+            .sidebar:hover {
+                width: var(--sidebar-width);
+                z-index: 1001;
+            }
+            
+            .sidebar:hover .sidebar-header,
+            .sidebar:hover .menu-label,
+            .sidebar:hover .menu-item span {
+                display: flex;
+            }
+            
+            .sidebar:hover .menu-item {
+                justify-content: flex-start;
+                padding: 14px 20px;
+            }
+            
+            .sidebar:hover .menu-item i {
+                margin-right: 12px;
+                font-size: 18px;
+            }
+
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .filter-row {
+                flex-direction: column;
+            }
+
+            .filter-group {
+                min-width: 100%;
+            }
+
+            .results-table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .header {
+                padding: 0 15px;
+            }
+            
+            .user-profile .user-name {
+                display: none;
+            }
+
+            .dashboard {
+                padding: 15px;
+            }
+
+            .page-actions {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .btn {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">S</div>
+            <div class="sidebar-title">Samo CRM</div>
+        </div>
+        
+        <div class="sidebar-menu">
+            <div class="menu-label">Main</div>
+            <a href="{% url 'admin_dashboard' %}" class="menu-item">
+                <i class="fas fa-home"></i>
+                <span>Dashboard</span>
+            </a>
+            <div class="menu-label">User</div>
+            <a href="{% url 'admin_users_management' %}" class="menu-item ">
+                <i class="fas fa-user-friends"></i>
+                <span>Users</span>
+            </a>
+            <a href="{% url 'teachers_list' %}" class="menu-item ">
+                <i class="fas fa-chalkboard-teacher"></i>
+                <span>Teachers</span>
+            </a>
+            <a href="{% url 'student_list' %}" class="menu-item">
+                <i class="fas fa-users"></i>
+                <span>Students</span>
+            </a>
+            <div class="menu-label">Group</div>
+            <a href="{% url 'groups_list' %}" class="menu-item ">
+                <i class="fas fa-layer-group"></i>
+                <span>Groups</span>
+            </a>
+            <a href="{% url 'attendance_list' %}" class="menu-item">
+                <i class="fas fa-clipboard-check"></i>
+                <span>Attendance</span>
+            </a>
+            <div class="menu-label">Exam</div>
+            <a href="{% url 'exams:admin_exam_management' %}" class="menu-item">
+                <i class="fas fa-file-alt"></i>
+                <span>Exams</span>
+            </a>
+            <a href="{% url 'exams:admin_exam_results' %}" class="menu-item active">
+                <i class="fas fa-chart-line"></i>
+                <span>Performance</span>
+            </a>
+            <div class="menu-label">Payment</div>
+            <a href="{% url 'payments:admin_payments_dashboard' %}" class="menu-item">
+                <i class="fas fa-money-check"></i>
+                <span>Payments</span>
+            </a>
+            <div class="menu-label">Education</div>
+            <a href="{% url 'education:courses_dashboard' %}" class="menu-item">
+                <i class="fas fa-graduation-cap"></i>
+                <span>Courses</span>
+            </a>
+            <a href="{% url 'education:admin_homework' %}" class="menu-item">
+                <i class="fas fa-tasks"></i>
+                <span>Assignments</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header/Navbar -->
+        <header class="header">
+            <div class="header-left">
+                <!-- No burger icon as requested -->
+            </div>
+            
+            <div class="header-right">
+                <div class="header-action">
+                    <i class="far fa-bell"></i>
+                    <span class="notification-badge">3</span>
+                </div>
+                
+                <div class="user-profile">
+                    <div class="user-avatar">AJ</div>
+                    <div class="user-name">Admin John</div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Exam Results Content -->
+        <div class="dashboard">
+            <div class="page-header">
+                <h1 class="page-title">Exam Results</h1>
+                <div class="page-actions">
+                    <button class="btn btn-secondary">
+                        <i class="fas fa-download"></i> Export Results
+                    </button>
+                    <button class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Add New Result
+                    </button>
+                </div>
+            </div>
+
+            <div class="filters">
+                <form method="get">
+                    <div class="filter-row">
+                        <div class="filter-group">
+                            <label class="filter-label">Subject</label>
+                            {{ form.subject }}
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label">Group</label>
+                            {{ form.group }}
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label">Exam</label>
+                            {{ form.exam }}
+                        </div>
+                    </div>
+                    <div class="filter-row">
+                        <div class="filter-group">
+                            <label class="filter-label">Date Range</label>
+                            {{ form.date_from }}
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label">To</label>
+                            {{ form.date_to }}
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label">Student</label>
+                            {{ form.student }}
+                        </div>
+                    </div>
+                    <div class="filter-row">
+                        <div class="filter-group">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-filter"></i> Apply Filters
+                            </button>
+                            <a href="{% url 'exams:admin_exam_results' %}" class="btn btn-secondary" style="margin-top: 15px;">
+                                <i class="fas fa-redo"></i> Reset
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="results-container">
+                <div class="results-header">
+                    <h2 class="results-title">Exam Results</h2>
+                    <span class="results-count">Showing {{ results_count }} result{{ results_count|pluralize }}</span>
+                </div>
+
+                <div class="results-content">
+                    <table class="results-table">
+                        <thead>
+                            <tr>
+                                <th>Student</th>
+                                <th>Exam</th>
+                                <th>Subject</th>
+                                <th>Group</th>
+                                <th>Date</th>
+                                <th>Score</th>
+                                <th>Max Score</th>
+                                <th>Percentage</th>
+                                <th>Remark</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in results_with_percentage %}
+                            {% with result=item.result percentage=item.percentage %}
+                            <tr>
+                                <td>
+                                    <div class="student-info">
+                                        <div class="student-avatar">
+                                            {{ result.student.user.get_full_name|default:result.student.user.username|slice:":2"|upper }}
+                                        </div>
+                                        <div class="student-name">
+                                            {{ result.student.user.get_full_name|default:result.student.user.username }}
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>{{ result.exam.name }}</td>
+                                <td>{{ result.exam.subject.name }}</td>
+                                <td>{{ result.exam.group.name }}</td>
+                                <td>{{ result.exam.date|date:"Y-m-d" }}</td>
+
+                                {% if percentage >= 90 %}
+                                    <td class="score-cell score-excellent">{{ result.score }}</td>
+                                    <td>{{ result.exam.max_score }}</td>
+                                    <td class="score-cell score-excellent">{{ percentage|floatformat:0 }}%</td>
+                                    <td><span class="remark-cell remark-excellent">Excellent</span></td>
+                                {% elif percentage >= 70 %}
+                                    <td class="score-cell score-good">{{ result.score }}</td>
+                                    <td>{{ result.exam.max_score }}</td>
+                                    <td class="score-cell score-good">{{ percentage|floatformat:0 }}%</td>
+                                    <td><span class="remark-cell remark-good">Good</span></td>
+                                {% elif percentage >= 50 %}
+                                    <td class="score-cell score-poor">{{ result.score }}</td>
+                                    <td>{{ result.exam.max_score }}</td>
+                                    <td class="score-cell score-poor">{{ percentage|floatformat:0 }}%</td>
+                                    <td><span class="remark-cell remark-average">Average</span></td>
+                                {% else %}
+                                    <td class="score-cell score-poor">{{ result.score }}</td>
+                                    <td>{{ result.exam.max_score }}</td>
+                                    <td class="score-cell score-poor">{{ percentage|floatformat:0 }}%</td>
+                                    <td><span class="remark-cell remark-poor">Poor</span></td>
+                                {% endif %}
+
+                                <td>
+                                    <div class="action-cell">
+                                        <div class="action-btn"><i class="fas fa-eye"></i></div>
+                                        <div class="action-btn"><i class="fas fa-edit"></i></div>
+                                        <div class="action-btn"><i class="fas fa-trash"></i></div>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endwith %}
+                            {% empty %}
+                            <tr>
+                                <td colspan="10">
+                                    <div class="empty-state">
+                                        <i class="fas fa-clipboard-list"></i>
+                                        <h3>No exam results found</h3>
+                                        <p>Try adjusting your filters or add new exam results.</p>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add active class to clicked menu items
+            const menuItems = document.querySelectorAll('.menu-item');
+            
+            menuItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    
+                    // Remove active class from all items
+                    menuItems.forEach(i => i.classList.remove('active'));
+                    
+                    // Add active class to clicked item
+                    this.classList.add('active');
+                });
+            });
+
+            // Filter functionality
+            const filters = {
+                subject: document.getElementById('subjectFilter'),
+                group: document.getElementById('groupFilter'),
+                exam: document.getElementById('examFilter'),
+                student: document.getElementById('studentFilter'),
+                dateFrom: document.getElementById('dateFrom'),
+                dateTo: document.getElementById('dateTo')
+            };
+
+            // Add event listeners to filters
+            Object.values(filters).forEach(filter => {
+                if (filter) {
+                    filter.addEventListener('change', applyFilters);
+                }
+            });
+
+            function applyFilters() {
+                // In a real application, this would make an API call to filter results
+                // For this demo, we'll just log the filter values
+                console.log('Filters applied:', {
+                    subject: filters.subject.value,
+                    group: filters.group.value,
+                    exam: filters.exam.value,
+                    student: filters.student.value,
+                    dateFrom: filters.dateFrom.value,
+                    dateTo: filters.dateTo.value
+                });
+            }
+
+            // Set today's date as default for dateTo filter
+            const today = new Date();
+            const formattedDate = today.toISOString().split('T')[0];
+            if (filters.dateTo) {
+                filters.dateTo.value = formattedDate;
+            }
+
+            // Set dateFrom to 30 days ago
+            const thirtyDaysAgo = new Date();
+            thirtyDaysAgo.setDate(today.getDate() - 30);
+            const formattedDate30DaysAgo = thirtyDaysAgo.toISOString().split('T')[0];
+            if (filters.dateFrom) {
+                filters.dateFrom.value = formattedDate30DaysAgo;
+            }
+        });
+    </script>
+</body>
+</html>
